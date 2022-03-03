@@ -5,3 +5,22 @@
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+stages:
+    - build
+    - test
+
+build:
+    stage: build
+    script:
+        - echo "Building"
+        - mkdir build
+        - touch build/info.txt
+    artifacts:
+        paths:
+            - build/
+
+test:
+    stage: test
+    script:
+        - echo "Testing"
+        - test -f "build/info.txt"
