@@ -47,7 +47,7 @@ stages:
     - source venv/bin/activate
     - pip install -r requirements.txt
   script:
-    - pytest -v src/*.py 
+    - pytest -v src/test_api.py src/test_main.py
 
 "build-job":       # This job runs in the build stage, which runs first.
   stage: build
