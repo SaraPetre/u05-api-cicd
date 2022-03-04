@@ -1,10 +1,5 @@
-fastapi
+fastapi[all]
+psycopg[binary]
 pytest
-uvicorn
-requests
 pylint
 pycodestyle
-
-
-
-

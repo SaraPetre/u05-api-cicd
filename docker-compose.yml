@@ -1,0 +1,21 @@
+---
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - 127.0.0.1:5432:5432/tcp
+    environment:
+      POSTGRES_PASSWORD: testpass
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+      - ./shared_data:/shared_data
+
+  pgadmin:
+    image: dpage/pgadmin4:6
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.admin"
+      PGADMIN_DEFAULT_PASSWORD: "testpass"
+    volumes:
+      - ./pgadmin_data:/var/lib/pgadmin
+    ports:
+      - 127.0.0.1:8080:80

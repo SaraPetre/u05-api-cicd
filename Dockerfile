@@ -4,4 +4,4 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY src/* /app/
 EXPOSE 8080
-ENTRYPOINT [ "uvicorn", "--host", "0.0.0.0", "--port", "8080", "main:app" ]
+ENTRYPOINT [ "uvicorn", "--host", "0.0.0.0", "--port", "8080", "api:app" ]
