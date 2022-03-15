@@ -4,8 +4,8 @@ from fastapi import FastAPI, HTTPException
 
 import psycopg
 
-
 app = FastAPI()
+
 
 @app.get("/")
 def read_main():
