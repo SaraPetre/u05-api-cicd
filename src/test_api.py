@@ -21,6 +21,6 @@ def test_stores_name():
     """D
 
     """
-    response = client.get("/stores/aras")
+    response = client.get("/stores")
     assert response.status_code == 404
     assert response.json() == {"detail": "Not Found!"}
