@@ -40,7 +40,8 @@ def specific_store(specifik):
     '''
 
     with app.db.cursor() as cur:
-        cur.execute("""select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city
+        cur.execute("""select stores.name, store_addresses.address, store_addresses.zip,
+                    store_addresses.city
                     from stores
                     join store_addresses
                     on stores.id = store_addresses.store where name = %s;""", [specifik])
@@ -50,7 +51,7 @@ def specific_store(specifik):
             result = {"data": {"name": sname[0], "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
             return result
         else:
-            raise fastapi.HTTPException(status_code=404, detail=f"Store {specifik} not found!")
+            raise HTTPException(status_code=404, detail=f"Store {specifik} not found!")
 
 
 @app.get("/stores")
@@ -60,11 +61,17 @@ def stores():
     '''
 
     with app.db.cursor() as cur:
-        cur.execute("select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city from stores join store_addresses on stores.id = store_addresses.store")
+        cur.execute("""select stores.name, store_addresses.address, store_addresses.zip,
+                    store_addresses.city
+                    from stores
+                    join store_addresses on stores.id = store_addresses.store""")
         for record in cur:
             print(record)
     with app.db.cursor() as cur:
-        cur.execute("select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city from stores join store_addresses on stores.id = store_addresses.store")
+        cur.execute("""select stores.name, store_addresses.address, store_addresses.zip,
+                    store_addresses.city
+                    from stores
+                    join store_addresses on stores.id = store_addresses.store""")
         data = cur.fetchall()
         data = [{"name": d[0], "address": f"{d[1]}, {d[2]} {d[3]}"} for d in data]
         result = {"data": data}
