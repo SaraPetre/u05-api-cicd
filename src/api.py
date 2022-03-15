@@ -7,12 +7,15 @@ import psycopg
 
 app = FastAPI()
 
-app.get("/")
-async def read_main():
 
+@app.get("/")
+def read_main():
     """The root endpoint, simply says hi to the user :)
+
+
     """
     return {"msg": "Hello, World!"}
+
 
 @app.on_event("startup")
 def startup():
@@ -49,6 +52,7 @@ def specific_store(specifik):
         else:
             raise fastapi.HTTPException(status_code=404, detail=f"Store {specifik} not found!")
 
+
 @app.get("/stores")
 def stores():
     '''
@@ -58,13 +62,14 @@ def stores():
     with app.db.cursor() as cur:
         cur.execute("select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city from stores join store_addresses on stores.id = store_addresses.store")
         for record in cur:
-            print(record)   
+            print(record)
     with app.db.cursor() as cur:
         cur.execute("select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city from stores join store_addresses on stores.id = store_addresses.store")
         data = cur.fetchall()
         data = [{"name": d[0], "address": f"{d[1]}, {d[2]} {d[3]}"} for d in data]
-        result = {"data":data}
+        result = {"data": data}
         return result
+
 
 @app.get("/cities")
 def city(zip=None):
