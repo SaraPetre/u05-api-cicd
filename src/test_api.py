@@ -1,29 +1,25 @@
-"D"
-from fastapi import FastAPI
+"""Minimal tests for main.py
+"""
+from fastapi.testclient import TestClient
 
-import psycopg
+from api import app
 
-app = FastAPI()
-
-
-@app.on_event("startup")
-def startup():
-    "D"
-    app.db = psycopg.connect(
-        "postgresql://postgres:arastest@localhost/postgres")
+client = TestClient(app)
 
 
-@app.on_event("shutdown")
-def shutdown():
-    "D"
-    app.db.close()
+def test_read_main():
+    """This tests if the root endpoint return 200 OK and the right message to the
+user
 
+    """
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"msg": "Hello, World!"}
 
-@app.get("/stores")
-def stores():
-    "D"
-    with app.db.cursor() as cur:
-        cur.execute("SELECT name FROM stores")
-        names = cur.fetchall()
-        names = [name[0] for name in names]
-        return names
+def test_stores_name():
+    """D
+
+    """
+    response = client.get("/stores/aras")
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Not Found!"}

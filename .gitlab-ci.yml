@@ -36,7 +36,7 @@ stages:
     - source venv/bin/activate
     - pip install -r requirements.txt
   script:
-    - pylint src/test_api.py src/test_main.py src/main.py
+    - pylint src/*.py
 
 "Run unit tests":
   stage: tests
@@ -47,7 +47,7 @@ stages:
     - source venv/bin/activate
     - pip install -r requirements.txt
   script:
-    - pytest -v src/test_api.py src/test_main.py
+    - pytest -v src/*.py 
 
 "build-job":       # This job runs in the build stage, which runs first.
   stage: build
