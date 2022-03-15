@@ -58,7 +58,7 @@ def stores():
     with app.db.cursor() as cur:
         cur.execute("select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city from stores join store_addresses on stores.id = store_addresses.store")
         for record in cur:
-            print (record)   
+            print(record)   
     with app.db.cursor() as cur:
         cur.execute("select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city from stores join store_addresses on stores.id = store_addresses.store")
         data = cur.fetchall()
