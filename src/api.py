@@ -1,16 +1,15 @@
 "D"
-from unicodedata import name
 
 from fastapi import FastAPI, HTTPException
 
 import psycopg
 
-import json
 
 app = FastAPI()
 
 app.get("/")
 async def read_main():
+
     """The root endpoint, simply says hi to the user :)
     """
     return {"msg": "Hello, World!"}
@@ -18,6 +17,7 @@ async def read_main():
 @app.on_event("startup")
 def startup():
     "D"
+
     app.db = psycopg.connect(
         "dbname=postgres user=postgres host=localhost password=arastest port=5433")
 
@@ -26,6 +26,7 @@ def startup():
 def shutdown():
     "D"
     app.db.close()
+
 
 @app.get("/stores/{specifik}")
 def specific_store(specifik):
@@ -53,10 +54,11 @@ def stores():
     '''
     This endpoint returns data on stores (name and complete adress)
     '''
+
     with app.db.cursor() as cur:
         cur.execute("select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city from stores join store_addresses on stores.id = store_addresses.store")
         for record in cur:
-          print (record)   
+            print (record)   
     with app.db.cursor() as cur:
         cur.execute("select stores.name, store_addresses.address, store_addresses.zip, store_addresses.city from stores join store_addresses on stores.id = store_addresses.store")
         data = cur.fetchall()
