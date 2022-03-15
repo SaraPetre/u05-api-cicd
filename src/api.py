@@ -7,7 +7,6 @@ import psycopg
 
 app = FastAPI()
 
-
 @app.get("/")
 def read_main():
     """The root endpoint, simply says hi to the user :)

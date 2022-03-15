@@ -17,10 +17,10 @@ def test_read_main():
     assert response.json() == {"msg": "Hello, World!"}
 
 
-def test_stores_name():
-    """D
+#def test_stores_name():
+ #   """D
 
-    """
-    response = client.get("/stores/aras")
-    assert response.status_code == 404
-    assert response.json() == {"detail": "Not Found!"}
+  #  """
+   # response = client.get("/stores/{specifik}")
+    #assert response.status_code == 404
+    #assert response.json() == {"detail": "Not Found!"}
