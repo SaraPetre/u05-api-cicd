@@ -1,12 +1,12 @@
 """Minimal tests for main.py
 """
-from fastapi import FastAPI, HTTPException
+#from fastapi import FastAPI
 
 from fastapi.testclient import TestClient
 
 import psycopg
 
-from api import app, shutdown
+from api import app
 
 client = TestClient(app)
 
