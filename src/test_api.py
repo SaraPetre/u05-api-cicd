@@ -41,8 +41,8 @@ def test_specific_store_not_in_list():
     butik, vald via namn om ett namn som inte finns i DB anges,
     returnera 404 Not Found
     '''
-    # startup()
+    startup()
     response = client.get("/stores/ArasDjuraffär")
     assert response.status_code == 404
     assert response.json() == {'detail': 'Store ArasDjuraffär not found!'}
-    # shutdown()
+    shutdown()
