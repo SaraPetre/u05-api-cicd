@@ -36,7 +36,7 @@ stages:
     - source venv/bin/activate
     - pip install -r requirements.txt
   script:
-    - pylint --disable=R1705 --disable=W0622 src/*.py
+    - pylint --disableR0903 --disable=R1705 --disable=W0622 src/*.py
 
 "Run unit tests":
   stage: tests
