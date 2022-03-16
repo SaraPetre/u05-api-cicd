@@ -1,6 +1,7 @@
 "Time to add info here Sara"
 
 from fastapi import FastAPI, HTTPException
+from unittest.mock import MagicMock
 
 import psycopg
 
@@ -15,13 +16,18 @@ def read_main():
     """
     return {"msg": "Hello, World!"}
 
+class CursorMock(MagicMock):
+    fetchall = MagicMock(return_value=[[1, "a", "b"]])
+
+class DBMock:
+    cursor = CursorMock
 
 @app.on_event("startup")
 def startup():
     "D"
 
     app.db = psycopg.connect(
-        """"postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05""")
+        """dbname=postgres user=postgres host=localhost password=arastest port=5433""")
 
 
 @app.on_event("shutdown")
