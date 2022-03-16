@@ -1,8 +1,12 @@
 """Minimal tests for main.py
 """
+from fastapi import FastAPI, HTTPException
+
 from fastapi.testclient import TestClient
 
-from api import app
+import psycopg
+
+from api import app, shutdown
 
 client = TestClient(app)
 
@@ -12,6 +16,30 @@ def test_read_main():
     message to the user
 
     """
+    startup()
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"msg": "Hello, World!"}
+    shutdown()
+
+def startup():
+    "D"
+
+    app.db = psycopg.connect(
+        "dbname=postgres user=postgres host=localhost password=arastest port=5433")
+
+def shutdown():
+    "D"
+    app.db.close()
+
+def test_specific_store_not_in_list():
+    '''
+    Testen returnera data (namn och fullständig address) för en specifik
+    butik, vald via namn om ett namn som inte finns i DB anges,
+    returnera 404 Not Found
+    '''
+    startup()
+    response = client.get("/stores/ArasDjuraffär")
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'Store ArasDjuraffär not found!'}
+    shutdown()

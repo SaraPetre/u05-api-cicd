@@ -93,3 +93,26 @@ def city(zip=None):
         names = cur.fetchall()
         result = {"data": [name[0] for name in names]}
         return result
+
+
+@app.get("/sales")
+def sales():
+    '''
+    GET /sales : Denna endpoint ska returnera en lista över alla transak-
+    tioner, i denna format:
+    {”data” : [
+    {”store” : ”Store name” ,
+    ”timestamp” : ”yyyymmdd hh:mm:ss” ,
+    ”saleid” : ”uuid for the transaction here”},
+    ...
+    ]
+}
+    '''
+    with app.db.cursor() as cur:
+        cur.execute("""SELECT stores.name, sales.time, sales.store
+                    FROM stores
+                    INNER JOIN sales
+                    ON stores.id = sales.store;""")
+        data = cur.fetchall()
+        data = {"data":[{"store": d[0], "timestamp": d[1], "saleid": d[2]} for d in data]}
+        return data
