@@ -46,7 +46,6 @@ stages:
     - virtualenv venv
     - source venv/bin/activate
     - pip install -r requirements.txt
-    - Docker compose down
     - Docker compose up -d
   script:
     - pytest -v src/test_api.py 
