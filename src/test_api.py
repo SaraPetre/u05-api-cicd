@@ -1,4 +1,4 @@
-"""Minimal tests for main.py
+"""Minimal tests for api.py
 """
 
 from fastapi.testclient import TestClient
