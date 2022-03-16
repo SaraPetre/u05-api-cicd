@@ -15,11 +15,11 @@ def test_read_main():
     message to the user
 
     """
-    # startup()
+    startup()
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"msg": "Hello, World!"}
-    # shutdown()
+    shutdown()
 
 
 def startup():
