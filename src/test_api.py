@@ -15,11 +15,11 @@ def test_read_main():
     message to the user
 
     """
-    startup()
+    # startup()
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"msg": "Hello, World!"}
-    shutdown()
+    # shutdown()
 
 
 def startup():
@@ -41,8 +41,8 @@ def test_specific_store_not_in_list():
     butik, vald via namn om ett namn som inte finns i DB anges,
     returnera 404 Not Found
     '''
-    startup()
+    # startup()
     response = client.get("/stores/ArasDjuraffär")
     assert response.status_code == 404
     assert response.json() == {'detail': 'Store ArasDjuraffär not found!'}
-    shutdown()
+    # shutdown()
