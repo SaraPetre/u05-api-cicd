@@ -21,7 +21,8 @@ def startup():
     "D"
 
     app.db = psycopg.connect(
-        "dbname=postgres user=postgres host=doe21-db.grinton.dev password=DjExUSMcwWpzXziT port=5433")
+        """dbname=postgres user=postgres host=doe21-db.grinton.dev
+        password=DjExUSMcwWpzXziT port=5433""")
 
 
 @app.on_event("shutdown")
