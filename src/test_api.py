@@ -22,15 +22,19 @@ def test_read_main():
     assert response.json() == {"msg": "Hello, World!"}
     shutdown()
 
+
 def startup():
     "D"
 
     app.db = psycopg.connect(
         "dbname=postgres user=postgres host=localhost password=arastest port=5433")
 
+
 def shutdown():
     "D"
+
     app.db.close()
+
 
 def test_specific_store_not_in_list():
     '''

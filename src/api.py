@@ -114,5 +114,5 @@ def sales():
                     INNER JOIN sales
                     ON stores.id = sales.store;""")
         data = cur.fetchall()
-        data = {"data":[{"store": d[0], "timestamp": d[1], "saleid": d[2]} for d in data]}
+        data = {"data": [{"store": d[0], "timestamp": d[1], "saleid": d[2]} for d in data]}
         return data
