@@ -26,8 +26,7 @@ def startup():
     "D"
 
     app.db = psycopg.connect(
-        """dbname=postgres user=postgres host=doe21-db.grinton.dev
-         password=DjExUSMcwWpzXziT port=5433""")
+        """"postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05""")
 
 
 def shutdown():
