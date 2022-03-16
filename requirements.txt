@@ -5,3 +5,4 @@ uvicorn
 requests
 pylint
 autopep8
+pytest-cov
