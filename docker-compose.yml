@@ -5,7 +5,7 @@ services:
     ports:
       - 127.0.0.1:5433:5432/tcp
     environment:
-      POSTGRES_PASSWORD: "arastest"
+      POSTGRES_PASSWORD: "DjExUSMcwWpzXziT"
     volumes:
       - ./db_data:/var/lib/postgresql/data
       - ./shared_data:/shared_data
@@ -19,3 +19,4 @@ services:
       - ./pgadmin_data:/var/lib/pgadmin
     ports:
       - 127.0.0.1:8080:80
+      
