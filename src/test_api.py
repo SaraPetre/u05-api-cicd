@@ -25,9 +25,9 @@ def test_read_main():
 def startup():
     "D"
 
-    app.db = psycopg.connect(
-        """dbname=postgres user=postgres host=localhost
-         password=arastest port=5433
+   app.db = psycopg.connect(
+        """dbname=u05 user=postgres host=doe21-db.grinton.dev
+         password=DjExUSMcwWpzXziT port=5432
         """)
 
 
