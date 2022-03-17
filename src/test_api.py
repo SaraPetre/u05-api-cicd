@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 import psycopg
 
-from api import DBMock, app
+from api import app  # ,DBMock
 
 client = TestClient(app)
 
@@ -15,18 +15,20 @@ def test_read_main():
     message to the user
 
     """
-    # startup()
+    startup()
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"msg": "Hello, World!"}
-    # shutdown()
+    shutdown()
 
 
 def startup():
-     "D"
+    "D"
 
-     app.db = psycopg.connect(
-        """dbname=postgres user=postgres host=localhost password=arastest port=5433""")
+    app.db = psycopg.connect(
+        """dbname=postgres user=postgres host=localhost
+         password=arastest port=5433
+        """)
 
 
 def shutdown():
@@ -42,10 +44,10 @@ def test_specific_store_not_in_list():
     returnera 404 Not Found
     '''
     startup()
-    #app.db = DBMock()
+    # app.db = DBMock()
     response = client.get("/stores/ArasDjuraffär")
-    #assert response.status_code == 200
-    #assert response.json() == [[1, "a", "b"]]
+    # assert response.status_code == 200
+    # assert response.json() == [[1, "a", "b"]]
     assert response.status_code == 404
     assert response.json() == {'detail': 'Store ArasDjuraffär not found!'}
     shutdown()
