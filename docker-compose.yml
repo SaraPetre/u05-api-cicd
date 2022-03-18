@@ -1,5 +1,16 @@
 ---
 services:
+  api:
+    build: .
+    image: myapi
+    command: yarn start
+    environment:
+      APP_DB_PASSWORD: "arastest"
+    expose:
+      - 8000
+    depends_on:
+      - db
+
   db:
     image: postgres:latest
     ports:

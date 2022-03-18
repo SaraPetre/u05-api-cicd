@@ -6,3 +6,4 @@ requests
 pylint
 autopep8
 pytest-cov
+pipenv
