@@ -1,6 +1,6 @@
-# teamcodehard-api-doe21
+# aras_u05_sprint1
 
-u05
+Work done on sprint one
 
 ## Getting started
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/t13371/teamcodehard-api-doe21.git
+git remote add origin https://gitlab.com/SaraPetre/aras_u05_sprint1.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/t13371/teamcodehard-api-doe21/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/SaraPetre/aras_u05_sprint1/-/settings/integrations)
 
 ## Collaborate with your team
 

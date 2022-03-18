@@ -1,0 +1,5 @@
+db_data
+pgadmin_data
+shared_data
+env/*
+*__pycache__*
