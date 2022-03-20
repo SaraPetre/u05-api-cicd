@@ -131,33 +131,3 @@ def sales():
         data = cur.fetchall()
         data = {"data": [{"store": d[0], "timestamp": d[1], "saleid": d[2]} for d in data]}
         return data
-
-
-@app.get("/sales/{saleid}")
-def sales(saleid=None):
-    '''
-    Returns store name,date/time,saleid, product name and quantity for
-    a specific sale.    
-    '''
-    if saleid == None:
-        raise fastapi.HTTPException(status_code=422,
-        detal=f"Unprocessable Entry.")
-    elif saleid == True:
-        raise fastapi.HTTPException(status_code=404,
-        detail=f"saleid '{saleid}' not found!")
-    else:
-        with app.db.cursor() as cur:
-            cur.execute("""SELECT stores.name, sales.time, sales.store,
-                        sold_products.sale,sold_products.product,
-                        sold_products.quantity, products.name
-                        FROM sales
-                        INNER JOIN stores ON stores.id = sales.store
-                        INNER JOIN sold_products ON sales.id = sold_products.sale
-                        INNER JOIN products ON products.id = sold_products.product
-                        where sold_products.sale = %s;""", [saleid])
-            data = cur.fetchall()
-            data = {"data":[{"store": d[0], "timestamp": d[1], "saleid": d[3],
-                    "products":[{ "name": d[6], "qty": d[5]}]
-                    }
-                    for d in data]}
-            return data
