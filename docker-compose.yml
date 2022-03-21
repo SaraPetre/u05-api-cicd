@@ -3,7 +3,6 @@ services:
   api:
     build: .
     image: myapi
-    command: yarn start
     environment:
       APP_DB_PASSWORD: "arastest"
     expose:
@@ -11,10 +10,7 @@ services:
     depends_on:
       - db
     ports:
-      - 127.0.0.1:8000:80
-    volumes:
-      - ./src:/api
-      # Lagt in ovan ports o volymes:
+      - 127.0.0.1:8000:8000
 
   db:
     image: postgres:latest
