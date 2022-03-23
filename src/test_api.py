@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 import psycopg
 
-from api import app  # ,DBMock
+from api import app
 
 client = TestClient(app)
 
@@ -44,10 +44,7 @@ def test_specific_store_not_in_list():
     returnera 404 Not Found
     '''
     startup()
-    # app.db = DBMock()
     response = client.get("/stores/ArasDjuraffär")
-    # assert response.status_code == 200
-    # assert response.json() == [[1, "a", "b"]]
     assert response.status_code == 404
     assert response.json() == {'detail': 'Store ArasDjuraffär not found!'}
     shutdown()
