@@ -1,6 +1,7 @@
-"Time to add info here Sara"
+"Realy Time to add info here Sara"
 
 # from unittest.mock import MagicMock
+from unicodedata import name
 from fastapi import FastAPI, HTTPException
 
 import psycopg
@@ -36,7 +37,8 @@ def startup():
     "D"
 
     app.db = psycopg.connect(
-        """dbname=postgres user=postgres host=localhost password=arastest port=5433""")
+        """dbname=u05 user=postgres host=doe21-db.grinton.dev
+         password=DjExUSMcwWpzXziT port=5432""")
 
 
 @app.on_event("shutdown")
@@ -60,12 +62,13 @@ def specific_store(specifik):
                     join store_addresses
                     on stores.id = store_addresses.store where name = %s;""", [specifik])
         sname = cur.fetchall()
-        if sname:
-            sname = sname[0]
-            result = {"data": {"name": sname[0], "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
-            return result
-        else:
+
+        if not sname:
             raise HTTPException(status_code=404, detail=f"Store {specifik} not found!")
+        else:
+            result = {"data": {"name": sname[0], "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
+
+        return result 
 
 
 @app.get("/stores")
@@ -87,12 +90,18 @@ def stores():
                     from stores
                     join store_addresses on stores.id = store_addresses.store""")
         data = cur.fetchall()
-        data = [{"name": d[0], "address": f"{d[1]}, {d[2]} {d[3]}"} for d in data]
-        result = {"data": data}
+
+        if not data:
+            raise HTTPException(status_code=404, detail=f"Store not found!")
+        else:
+            data = [{"name": d[0], "address": f"{d[1]}, {d[2]} {d[3]}"} for d in data]
+            result = {"data": data}
+
         return result
 
 
-@app.get("/cities")
+
+@app.get("/city")
 def city(zip=None):
     '''
     Denna endpoint returnerar alla unika städer där en butik finns.
@@ -101,11 +110,13 @@ def city(zip=None):
     bara städer med den specifika postkod.
     '''
     with app.db.cursor() as cur:
-        if not zip:
-            cur.execute("SELECT DISTINCT city FROM store_addresses;")
+        if zip:
+            cur.execute("SELECT city FROM store_addresses WHERE zip = (%s);", (zip,))
         else:
-            cur.execute("SELECT city FROM store_addresses WHERE zip = %s;", [zip])
+            cur.execute("SELECT DISTINCT city FROM store_addresses;")
         names = cur.fetchall()
+        if len(names) == 0:
+            raise HTTPException(status_code=404, detail="No city was found")
         result = {"data": [name[0] for name in names]}
         return result
 
