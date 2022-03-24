@@ -46,8 +46,44 @@ def test_specific_store_not_in_list():
     startup()
     # app.db = DBMock()
     response = client.get("/stores/ArasDjuraffär")
-    # assert response.status_code == 200
-    # assert response.json() == [[1, "a", "b"]]
     assert response.status_code == 404
-    assert response.json() == {'detail': 'Store ArasDjuraffär not found!'}
+    assert response.json() == {"detail": 'Store ArasDjuraffär not found!'}
+    shutdown()
+
+
+def test_stores():
+    '''
+    Testen returnera 200
+    '''
+    startup()    
+    response = client.get("/stores")
+    assert response.status_code == 200
+    assert response.json() == {"data": [{"name": "Djurjouren", "address": "Upplandsgatan 99, 12345 Stockholm"},
+    {"name": "Djuristen","address": "Skånegatan 420, 54321 Falun"},
+    {"name": "Den Lilla Djurbutiken","address": "Nätverksgatan 22, 55555 Hudiksvall"},
+    {"name": "Den Stora Djurbutiken","address": "Routergatan 443, 54545 Hudiksvall"},
+    {"name": "Noahs Djur & Båtaffär","address": "Stallmansgatan 666, 96427 Gävle"}]
+}
+    shutdown()
+
+
+
+def test_city():
+    '''
+    Testen returnera data från listan för att se till att vi får vad vi förväntar oss
+    '''
+    startup()
+    response = client.get("/city?zip=12345")
+    assert response.status_code == 200
+    assert response.json() == {"data": ["Stockholm"]}
+    shutdown()
+
+def test_city_non_existing():
+    '''
+    Testen returnera data 404
+    '''
+    startup()
+    response = client.get("/city/99999")
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'Not Found'}
     shutdown()
