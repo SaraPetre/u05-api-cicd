@@ -71,7 +71,7 @@ def test_stores():
     response = client.get("/stores")
     assert response.status_code == 200
     assert response.json() == {
-     "data": [
+      "data": [
         {
           "name": "Djurjouren",
           "address": "Upplandsgatan 99, 12345 Stockholm"
@@ -105,12 +105,11 @@ def test_cities():
     response = client.get("/cities")
     assert response.status_code == 200
     assert response.json() == {
-      "data":
-      [
-         "Gävle",
-         "Falun",
-         "Stockholm",
-         "Hudiksvall"
+      "data": [
+        "Gävle",
+        "Falun",
+        "Stockholm",
+        "Hudiksvall"
       ]
     }
     shutdown()
