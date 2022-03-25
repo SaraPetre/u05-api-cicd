@@ -1,11 +1,10 @@
-import uuid
 from datetime import datetime
+from fastapi import FastAPI, HTTPException, Query
+
+import uuid
+import psycopg
 # from collections import namedTuple
 # from typing import List, Optional
-
-import psycopg
-from fastapi import FastAPI, Query, HTTPException
-
 
 app = FastAPI()
 
@@ -95,7 +94,7 @@ def specific_store(storename=None):
         sname = cur.fetchall()
         if not sname:
            raise HTTPException(status_code=404,
-                            detail="404 Not found")
+                                detail="404 Not found")
 
         if sname:
             sname = sname[0]
@@ -167,7 +166,7 @@ def sales(saleid=None):
         data = cur.fetchall()
         if not data:
            raise HTTPException(status_code=404,
-                            detail="404 Not found")
+                                detail="404 Not found")
 
         data = {"data":[{"store": d[0], "timestamp": d[1], "saleid": d[3],
                 "products":[{ "name": d[6], "qty": d[5]}]
