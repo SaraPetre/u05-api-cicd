@@ -12,16 +12,17 @@ app = FastAPI()
 @app.on_event("startup")
 def startup():
     '''
-    fillertext
+    Open database connection
     '''
     app.db = psycopg.connect(
-    "postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05")
+        """dbname=u05 user=postgres host=doe21-db.grinton.dev
+         password=DjExUSMcwWpzXziT port=5432""")
 
 
 @app.on_event("shutdown")
 def shutdown():
     '''
-    fillertext
+    Close database connection
     '''
     app.db.close()
 
