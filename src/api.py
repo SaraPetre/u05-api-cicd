@@ -1,5 +1,7 @@
 "Realy Time to add info here Sara"
 
+import uuid
+
 from fastapi import FastAPI, HTTPException
 
 import psycopg
@@ -20,7 +22,7 @@ def read_main():
 def startup():
     "D"
 
-    app.db = psycopg.connect(
+    app.db = psycopg.connect(  # pragma: no cover
         """dbname=u05 user=postgres host=doe21-db.grinton.dev
          password=DjExUSMcwWpzXziT port=5432""")
 
@@ -28,7 +30,7 @@ def startup():
 @app.on_event("shutdown")
 def shutdown():
     "D"
-    app.db.close()
+    app.db.close()  # pragma: no cover
 
 
 @app.get("/stores/{specifik}")
@@ -40,18 +42,20 @@ def specific_store(specifik):
     '''
 
     with app.db.cursor() as cur:
-        cur.execute("""select stores.name, store_addresses.address, store_addresses.zip,
+        cur.execute("""select stores.name, store_addresses.address,
+                    store_addresses.zip,
                     store_addresses.city
                     from stores
                     join store_addresses
-                    on stores.id = store_addresses.store where name = %s;""", [specifik])
+                    on stores.id = store_addresses.store
+                    where name = %s;""", [specifik])
         sname = cur.fetchall()
         if sname:
             sname = sname[0]
-            result = {"data": {"name": sname[0], "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
-            return result
         else:
             raise HTTPException(status_code=404, detail=f"Store {specifik} not found!")
+        result = {"data": {"name": sname[0], "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
+        return result
 
 
 @app.get("/stores")
@@ -60,13 +64,6 @@ def stores():
     This endpoint returns data on stores (name and complete adress)
     '''
 
-    with app.db.cursor() as cur:
-        cur.execute("""select stores.name, store_addresses.address, store_addresses.zip,
-                    store_addresses.city
-                    from stores
-                    join store_addresses on stores.id = store_addresses.store""")
-        for record in cur:
-            print(record)
     with app.db.cursor() as cur:
         cur.execute("""select stores.name, store_addresses.address, store_addresses.zip,
                     store_addresses.city
@@ -107,13 +104,47 @@ def sales():
     ”saleid” : ”uuid for the transaction here”},
     ...
     ]
-}
+    }
     '''
     with app.db.cursor() as cur:
-        cur.execute("""SELECT stores.name, sales.time, sales.store
+        cur.execute("""SELECT stores.name, sales.time, sales.id
                     FROM stores
                     INNER JOIN sales
                     ON stores.id = sales.store;""")
         data = cur.fetchall()
         data = {"data": [{"store": d[0], "timestamp": d[1], "saleid": d[2]} for d in data]}
+        return data
+
+
+@app.get("/sales/{saleid}")
+def sales_id(saleid=None):
+    '''
+    Returns store name,date/time,saleid, product name and quantity for
+    a specific sale.
+    '''
+
+    # saknar tidsformattering
+
+    try:
+        uuid.UUID(saleid)
+    except ValueError as err:
+        raise HTTPException(status_code=422, detail="422 Unprocessable entry") from err
+
+    with app.db.cursor() as cur:
+        cur.execute("""SELECT stores.name, sales.time, sales.store,
+                    sold_products.sale,sold_products.product,
+                    sold_products.quantity, products.name
+                    FROM sales
+                    INNER JOIN stores ON stores.id = sales.store
+                    INNER JOIN sold_products ON sales.id
+                    = sold_products.sale
+                    INNER JOIN products ON products.id
+                    = sold_products.product
+                    where sold_products.sale = %s;""", [saleid])
+        data = cur.fetchall()
+        if not data:
+            raise HTTPException(status_code=404, detail="404 Not found")
+
+        data = {"data": [{"store": d[0], "timestamp": d[1], "saleid": d[3],
+                "products": [{"name": d[6], "qty": d[5]}]} for d in data]}
         return data

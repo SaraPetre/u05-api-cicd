@@ -11,7 +11,6 @@ cache:
 
 stages:
   - code_quality
-  # - Static Analysis 
   - tests         # List of stages for jobs, and their order of execution
   - build
   - deploy
@@ -37,16 +36,18 @@ stages:
     - source venv/bin/activate
     - pip install -r requirements.txt
   script:
-    - pylint --disable=R0903 --disable=R1705 --disable=W0622 src/*.py
+    - pylint src/*.py
 
-# "Run flake8":
-  # stage: Static Analysis
-  # before_script:
-    # - python --version
-    # - pip install pipenv
-    # - pipenv install --deploy --dev
-    # script:
-      #- pipenv run flake8 --max-line-length=120 sample/*.py
+"Run flake8":
+  stage: code_quality
+  before_script:
+    - python --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+    script:
+      flake8 --ignore=E501 src/*.py
 
 "Run unit tests":
   stage: tests
