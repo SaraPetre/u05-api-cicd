@@ -16,8 +16,7 @@ def startup():
     fillertext
     '''
     app.db = psycopg.connect(
-    "postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05"
-    )
+    "postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05")
 
 
 @app.on_event("shutdown")
