@@ -1,8 +1,15 @@
-from datetime import datetime
-from fastapi import FastAPI, HTTPException, Query
+"""
+This is not the greatest project in the world, no.
+This is just a tribute!
+"""
 
 import uuid
 import psycopg
+
+from datetime import datetime
+from fastapi import FastAPI, HTTPException
+
+
 # from collections import namedTuple
 # from typing import List, Optional
 
@@ -17,6 +24,7 @@ def startup():
     app.db = psycopg.connect(
         """dbname=u05 user=postgres host=doe21-db.grinton.dev
          password=DjExUSMcwWpzXziT port=5432""")
+    # postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05
 
 
 @app.on_event("shutdown")
@@ -50,8 +58,8 @@ def sales():
                     ON stores.id = sales.store;""")
         dbdata = cur.fetchall()
     data = []
-    for x in dbdata:
-        name, date_time, sale_id = x
+    for x_x in dbdata:
+        name, date_time, sale_id = x_x
         date_time = datetime.strptime(str(date_time), "%Y-%m-%dT%H:%M:%S")
         date_time = datetime.strftime("%Y%m%dT%H:%M:%S")
         data.append({"store": name, "timestamp": date_time,
