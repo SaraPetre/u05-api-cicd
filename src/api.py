@@ -147,8 +147,8 @@ def sales():
         return data
 
 
-@app.get("/sales/{saleid}")
-def sales(saleid=None):
+@app.get("/sale/{saleid}")
+def sale(saleid=None):
     '''
     Returns store name,date/time,saleid, product name and quantity for
     a specific sale.
