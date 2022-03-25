@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
-#from collections import namedTuple
-#from typing import List, Optional
+# from collections import namedTuple
+# from typing import List, Optional
 
 import psycopg
 from fastapi import FastAPI, Query, HTTPException
@@ -41,8 +41,8 @@ def sales():
     ]
     }   
     '''
-    #2022-01-25T13:52:34
-    #Saknar tidsformattering
+    # 2022-01-25T13:52:34
+    # Saknar tidsformattering
     
     with app.db.cursor() as cur:
         cur.execute("""SELECT stores.name, sales.time, sales.id
@@ -126,7 +126,7 @@ def city(zip=None):
 def sales():
     """Returns storename, time,saleid"""
 
-    #Saknar tidsformattering
+    # Saknar tidsformattering
 
     with app.db.cursor() as cur:
         cur.execute("""SELECT stores.name, sales.time, sales.id
@@ -146,7 +146,7 @@ def sales(saleid=None):
     a specific sale.    
     '''
 
-    #saknar tidsformattering
+    # saknar tidsformattering
 
     try:
         uuid.UUID(saleid)
