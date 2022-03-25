@@ -165,6 +165,6 @@ def sales(saleid=None):
         if not data:
             raise HTTPException(status_code=404, detail="404 Not found")
 
-        data = {"data" : [{"store": d[0], "timestamp": d[1], "saleid": d[3],
-                "products":[{ "name": d[6], "qty": d[5]}]} for d in data]}
+        data = {"data": [{"store": d[0], "timestamp": d[1], "saleid": d[3],
+                "products":[{"name": d[6], "qty": d[5]}]} for d in data]}
         return data
