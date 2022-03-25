@@ -39,11 +39,11 @@ def sales():
     ”saleid”:”uuid=for=the=transaction=here”},
     ...
     ]
-    }   
+    }
     '''
     # 2022-01-25T13:52:34
     # Saknar tidsformattering
-    
+
     with app.db.cursor() as cur:
         cur.execute("""SELECT stores.name, sales.time, sales.id
                     FROM stores
@@ -57,7 +57,7 @@ def sales():
         date_time = datetime.strftime("%Y%m%dT%H:%M:%S")
         data.append({"store": name, "timestamp": date_time, 
                     "sale_id": str(sale_id)})
-    
+
     return {"data": data}
 
 
@@ -103,7 +103,7 @@ def specific_store(storename=None):
             result = {"data": {"name": sname[0],
                         "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
             return result
-        
+
 
 @app.get("/cities")
 def city(zip=None):
@@ -134,7 +134,7 @@ def sales():
                     JOIN sales
                     ON stores.id = sales.store;""")
         data = cur.fetchall()
-        data = {"data": [{"store": d[0], "timestamp": d[1], 
+        data = {"data": [{"store": d[0], "timestamp": d[1],
                 "saleid": d[2]} for d in data]}
         return data
 
