@@ -53,7 +53,7 @@ def sales():
         name, date_time, sale_id = x
         date_time = datetime.strptime(str(date_time), "%Y-%m-%dT%H:%M:%S")
         date_time = datetime.strftime("%Y%m%dT%H:%M:%S")
-        data.append({"store": name, "timestamp": date_time, 
+        data.append({"store": name, "timestamp": date_time,
                     "sale_id": str(sale_id)})
 
     return {"data": data}
@@ -93,12 +93,12 @@ def specific_store(storename=None):
                     = %s;""", [storename])
         sname = cur.fetchall()
         if not sname:
-           raise HTTPException(status_code=404, detail="404 Not found")
+            raise HTTPException(status_code=404, detail="404 Not found")
 
         if sname:
             sname = sname[0]
             result = {"data": {"name": sname[0],
-                        "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
+                      "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
             return result
 
 
@@ -140,7 +140,7 @@ def sales():
 def sales(saleid=None):
     '''
     Returns store name,date/time,saleid, product name and quantity for
-    a specific sale.    
+    a specific sale.
     '''
 
     # saknar tidsformattering
@@ -163,10 +163,8 @@ def sales(saleid=None):
                     where sold_products.sale = %s;""", [saleid])
         data = cur.fetchall()
         if not data:
-           raise HTTPException(status_code=404, detail="404 Not found")
+            raise HTTPException(status_code=404, detail="404 Not found")
 
-        data = {"data":[{"store": d[0], "timestamp": d[1], "saleid": d[3],
-                "products":[{ "name": d[6], "qty": d[5]}]
-                }
-                for d in data]}
+        data = {"data" : [{"store": d[0], "timestamp": d[1], "saleid": d[3],
+                "products":[{ "name": d[6], "qty": d[5]}]} for d in data]}
         return data
