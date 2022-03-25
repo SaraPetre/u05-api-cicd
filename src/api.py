@@ -4,9 +4,11 @@ This is just a tribute!
 """
 
 import uuid
-import psycopg
 
 from datetime import datetime
+
+import psycopg
+
 from fastapi import FastAPI, HTTPException
 
 
