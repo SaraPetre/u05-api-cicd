@@ -93,8 +93,7 @@ def specific_store(storename=None):
                     = %s;""", [storename])
         sname = cur.fetchall()
         if not sname:
-           raise HTTPException(status_code=404,
-                                detail="404 Not found")
+           raise HTTPException(status_code=404, detail="404 Not found")
 
         if sname:
             sname = sname[0]
@@ -149,8 +148,7 @@ def sales(saleid=None):
     try:
         uuid.UUID(saleid)
     except ValueError:
-        raise HTTPException(status_code=422,
-                            detail="422 Unprocessable entry")
+        raise HTTPException(status_code=422, detail="422 Unprocessable entry")
 
     with app.db.cursor() as cur:
         cur.execute("""SELECT stores.name, sales.time, sales.store,
@@ -165,8 +163,7 @@ def sales(saleid=None):
                     where sold_products.sale = %s;""", [saleid])
         data = cur.fetchall()
         if not data:
-           raise HTTPException(status_code=404,
-                                detail="404 Not found")
+           raise HTTPException(status_code=404, detail="404 Not found")
 
         data = {"data":[{"store": d[0], "timestamp": d[1], "saleid": d[3],
                 "products":[{ "name": d[6], "qty": d[5]}]
