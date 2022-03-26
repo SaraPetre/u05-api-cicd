@@ -137,33 +137,34 @@ def test_sales():
     """
 
     startup()
-    response = client.get("/sales")
+    response = client.get("/stores")
     assert response.status_code == 200
     assert response.json() == {
         "data": [
             {
-              "store": "Den Stora Djurbutiken",
-              "timestamp": "20220125T13:52:34",
-              "sale_id": "0188146f-5360-408b-a7c5-3414077ceb59"
+                "name": "Djurjouren",
+                "address": "Upplandsgatan 99, 12345 Stockholm"
             },
             {
-              "store": "Djuristen",
-              "timestamp": "20220126T15:24:45",
-              "sale_id": "726ac398-209d-49df-ab6a-682b7af8abfb"
+                "name": "Djuristen",
+                "address": "Skånegatan 420, 54321 Falun"
             },
             {
-              "store": "Den Lilla Djurbutiken",
-              "timestamp": "20220207T09:00:56",
-              "sale_id": "602fbf9d-2b4a-4de2-b108-3be3afa372ae"
+                "name": "Den Lilla Djurbutiken",
+                "address": "Nätverksgatan 22, 55555 Hudiksvall"
             },
             {
-              "store": "Den Stora Djurbutiken",
-              "timestamp": "20220227T12:32:46",
-              "sale_id": "51071ca1-0179-4e67-8258-89e34b205a1e"
+                "name": "Den Stora Djurbutiken",
+                "address": "Routergatan 443, 54545 Hudiksvall"
+            },
+            {
+                "name": "Noahs Djur & Båtaffär",
+                "address": "Stallmansgatan 666, 96427 Gävle"
             }
         ]
     }
     shutdown()
+
 
 
 def test_sales_id_valid():
