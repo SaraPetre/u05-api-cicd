@@ -105,12 +105,12 @@ def test_cities():
     response = client.get("/cities")
     assert response.status_code == 200
     assert response.json() == {
-      "data": [
-        "Gävle",
-        "Falun",
-        "Stockholm",
-        "Hudiksvall"
-      ]
+        "data": [
+            "Gävle",
+            "Falun",
+            "Stockholm",
+            "Hudiksvall"
+        ]
     }
     shutdown()
 
@@ -124,9 +124,9 @@ def test_cities_zip():
     response = client.get("/cities?zip=55555")
     assert response.status_code == 200
     assert response.json() == {
-      "data": [
-        "Hudiksvall"
-      ]
+        "data": [
+            "Hudiksvall"
+        ]
     }
     shutdown()
 
@@ -140,28 +140,28 @@ def test_sales():
     response = client.get("/sales")
     assert response.status_code == 200
     assert response.json() == {
-      "data": [
-        {
-          "store": "Den Stora Djurbutiken",
-          "timestamp": "2022-01-25T13:52:34",
-          "saleid": "0188146f-5360-408b-a7c5-3414077ceb59"
-        },
-        {
-          "store": "Djuristen",
-          "timestamp": "2022-01-26T15:24:45",
-          "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb"
-        },
-        {
-          "store": "Den Lilla Djurbutiken",
-          "timestamp": "2022-02-07T09:00:56",
-          "saleid": "602fbf9d-2b4a-4de2-b108-3be3afa372ae"
-        },
-        {
-          "store": "Den Stora Djurbutiken",
-          "timestamp": "2022-02-27T12:32:46",
-          "saleid": "51071ca1-0179-4e67-8258-89e34b205a1e"
-        }
-      ]
+        "data": [
+            {
+                "store": "Den Stora Djurbutiken",
+                "timestamp": "2022-01-25T13:52:34",
+                "saleid": "0188146f-5360-408b-a7c5-3414077ceb59"
+            },
+            {
+                "store": "Djuristen",
+                "timestamp": "2022-01-26T15:24:45",
+                "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb"
+            },
+            {
+                "store": "Den Lilla Djurbutiken",
+                "timestamp": "2022-02-07T09:00:56",
+                "saleid": "602fbf9d-2b4a-4de2-b108-3be3afa372ae"
+            },
+            {
+                "store": "Den Stora Djurbutiken",
+                "timestamp": "2022-02-27T12:32:46",
+                "saleid": "51071ca1-0179-4e67-8258-89e34b205a1e"
+            }
+        ]
     }
     shutdown()
 
@@ -174,19 +174,19 @@ def test_sales_id_valid():
     response = client.get("/sales/726ac398-209d-49df-ab6a-682b7af8abfb")
     assert response.status_code == 200
     assert response.json() == {
-      "data": [
-        {
-          "store": "Djuristen",
-          "timestamp": "2022-01-26T15:24:45",
-          "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb",
-          "products": [
+        "data": [
             {
-              "name": "Elefantkoppel",
-              "qty": 1
+                "store": "Djuristen",
+                "timestamp": "2022-01-26T15:24:45",
+                "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb",
+                "products": [
+                    {
+                        "name": "Elefantkoppel",
+                        "qty": 1
+                    }
+                ]
             }
-          ]
-        }
-      ]
+        ]
     }
 
 
