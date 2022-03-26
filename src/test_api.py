@@ -166,7 +166,6 @@ def test_sales():
     shutdown()
 
 
-
 def test_sales_id_valid():
     """
     Tests the return of valid saleid.
