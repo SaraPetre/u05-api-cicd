@@ -121,7 +121,7 @@ def test_cities_zip():
     """
 
     startup()
-    response = client.get("/cities?zip=55555")
+    response = client.get("/cities?zipcode=55555")
     assert response.status_code == 200
     assert response.json() == {
         "data": [

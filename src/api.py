@@ -76,7 +76,7 @@ def stores():
 
 
 @app.get("/cities")
-def city(zip=None):
+def city(zipcode=None):
     '''
     Denna endpoint returnerar alla unika städer där en butik finns.
 
@@ -84,10 +84,10 @@ def city(zip=None):
     bara städer med den specifika postkod.
     '''
     with app.db.cursor() as cur:
-        if not zip:
+        if not zipcode:
             cur.execute("SELECT DISTINCT city FROM store_addresses;")
         else:
-            cur.execute("SELECT city FROM store_addresses WHERE zip = %s;", [zip])
+            cur.execute("SELECT city FROM store_addresses WHERE zip = %s;", [zipcode])
         names = cur.fetchall()
         result = {"data": [name[0] for name in names]}
         return result
