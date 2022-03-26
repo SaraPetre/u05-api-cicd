@@ -36,7 +36,7 @@ stages:
     - source venv/bin/activate
     - pip install -r requirements.txt
   script:
-    - pylint --disable=W0622 src/*.py
+    - pylint src/*.py
 
 #"Run flake8":
   #stage: code_quality
