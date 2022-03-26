@@ -131,8 +131,9 @@ def sale(saleid=None):
 
     try:
         uuid.UUID(saleid)
-    except ValueError:
-        raise HTTPException(status_code=422, detail="422 Unprocessable entry")
+    except ValueError as err:
+        raise HTTPException(status_code=422,
+                            detail="422 Unprocessable entry") from err
 
     with app.db.cursor() as cur:
         cur.execute("""SELECT stores.name, sales.time, sales.store,
