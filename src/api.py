@@ -59,7 +59,7 @@ def stores():
 
 
 @app.get("/stores/{storename}")
-def specific_store(storename):
+def specific_store(storename=None):
     '''
     Returns store name and address for a specific store chosen by name,
     if no/wrong name is given return 404 Not Found.
