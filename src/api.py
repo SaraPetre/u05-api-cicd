@@ -5,15 +5,10 @@ This is just a tribute!
 
 import uuid
 
-from datetime import datetime
-
 import psycopg
 
 from fastapi import FastAPI, HTTPException
 
-
-# from collections import namedTuple
-# from typing import List, Optional
 
 app = FastAPI()
 
@@ -43,38 +38,6 @@ def main():
     Returns a welcome message
     '''
     return {"msg": "Hello, World!"}
-
-@app.get("/sales_test")
-def salesss():
-    '''
-    GET /sales : Denna endpoint ska returnera en lista över alla transak-
-    tioner, i denna format:
-    {” data ”:[
-    {”store”:”Storename”,
-    ”timestamp”:”yyyymmddThh:mm:ss”,
-    ”saleid”:”uuid=for=the=transaction=here”},
-    ...
-    ]
-    }
-    '''
-    # 2022-01-25T13:52:34
-    # Saknar tidsformattering
-
-    with app.db.cursor() as cur:
-        cur.execute("""SELECT stores.name, sales.time, sales.id
-                    FROM stores
-                    JOIN sales
-                    ON stores.id = sales.store;""")
-        dbdata = cur.fetchall()
-    data = []
-    for x_x in dbdata:
-        name, date_time, sale_id = x_x
-        date_time = datetime.strptime(str(date_time), "%Y-%m-%dT%H:%M:%S")
-        date_time = datetime.strftime(date_time, "%Y%m%dT%H:%M:%S")
-        data.append({"store": name, "timestamp": date_time,
-                    "sale_id": str(sale_id)})
-
-    return {"data": data}
 
 
 @app.get("/stores")
@@ -142,18 +105,19 @@ def sales():
     '''
     Returns storename, time, saleid
     '''
-
-    # Saknar tidsformattering
-
     with app.db.cursor() as cur:
         cur.execute("""SELECT stores.name, sales.time, sales.id
                     FROM stores
                     JOIN sales
                     ON stores.id = sales.store;""")
-        data = cur.fetchall()
-        data = {"data": [{"store": d[0], "timestamp": d[1],
-                "saleid": d[2]} for d in data]}
-        return data
+        dbdata = cur.fetchall()
+    data = []
+    for items in dbdata:
+        name, date_time, sale_id = items
+        date_time = str(date_time).replace(" ", "T").replace("-", "")
+        data.append({"store": name, "timestamp": date_time,
+                    "sale_id": str(sale_id)})
+    return {"data": data}
 
 
 @app.get("/sale/{saleid}")
