@@ -71,28 +71,28 @@ def test_stores():
     response = client.get("/stores")
     assert response.status_code == 200
     assert response.json() == {
-      "data": [
-        {
-          "name": "Djurjouren",
-          "address": "Upplandsgatan 99, 12345 Stockholm"
-        },
-        {
-          "name": "Djuristen",
-          "address": "Skånegatan 420, 54321 Falun"
-        },
-        {
-          "name": "Den Lilla Djurbutiken",
-          "address": "Nätverksgatan 22, 55555 Hudiksvall"
-        },
-        {
-          "name": "Den Stora Djurbutiken",
-          "address": "Routergatan 443, 54545 Hudiksvall"
-        },
-        {
-          "name": "Noahs Djur & Båtaffär",
-          "address": "Stallmansgatan 666, 96427 Gävle"
-        }
-      ]
+        "data": [
+            {
+                "name": "Djurjouren",
+                "address": "Upplandsgatan 99, 12345 Stockholm"
+            },
+            {
+                "name": "Djuristen",
+                "address": "Skånegatan 420, 54321 Falun"
+            },
+            {
+                "name": "Den Lilla Djurbutiken",
+                "address": "Nätverksgatan 22, 55555 Hudiksvall"
+            },
+            {
+                "name": "Den Stora Djurbutiken",
+                "address": "Routergatan 443, 54545 Hudiksvall"
+            },
+            {
+                "name": "Noahs Djur & Båtaffär",
+                "address": "Stallmansgatan 666, 96427 Gävle"
+            }
+        ]
     }
     shutdown()
 
