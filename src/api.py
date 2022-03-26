@@ -37,6 +37,13 @@ def shutdown():
     app.db.close()
 
 
+@app.get("/")
+def main():
+    '''
+    Returns a welcome message
+    '''
+    return {"msg": "Hello, World!"}
+
 @app.get("/sales_test")
 def salesss():
     '''
@@ -63,7 +70,7 @@ def salesss():
     for x_x in dbdata:
         name, date_time, sale_id = x_x
         date_time = datetime.strptime(str(date_time), "%Y-%m-%dT%H:%M:%S")
-        date_time = datetime.strftime("%Y%m%dT%H:%M:%S")
+        date_time = datetime.strftime(date_time, "%Y%m%dT%H:%M:%S")
         data.append({"store": name, "timestamp": date_time,
                     "sale_id": str(sale_id)})
 
@@ -132,7 +139,9 @@ def city(zip=None):
 
 @app.get("/sales")
 def sales():
-    """Returns storename, time,saleid"""
+    '''
+    Returns storename, time, saleid
+    '''
 
     # Saknar tidsformattering
 
