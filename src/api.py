@@ -81,6 +81,7 @@ def specific_store(storename=None):
             result = {"data": {"name": sname[0],
                       "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
             return result
+        return None
 
 
 @app.get("/cities")
