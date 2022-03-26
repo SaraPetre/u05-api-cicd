@@ -74,7 +74,7 @@ def specific_store(storename):
                     = %s;""", [storename])
         sname = cur.fetchall()
         if not sname:
-            raise HTTPException(status_code=404, detail="404 Not found")
+            raise HTTPException(status_code=404, detail=f'Store {storename} not found!')
 
         if sname:
             sname = sname[0]

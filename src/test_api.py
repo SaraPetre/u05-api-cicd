@@ -46,7 +46,7 @@ def test_specific_store_not_in_list():
     startup()
     response = client.get("/stores/ArasDjuraffär")
     assert response.status_code == 404
-    assert response.json() == {'detail': 'Store ArasDjuraffär not found!'}
+    assert response.json() == {"detail": 'Store ArasDjuraffär not found!'}
     shutdown()
 
 
