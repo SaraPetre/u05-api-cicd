@@ -143,23 +143,23 @@ def test_sales():
         "data": [
             {
                 "store": "Den Stora Djurbutiken",
-                "timestamp": "2022-01-25T13:52:34",
-                "saleid": "0188146f-5360-408b-a7c5-3414077ceb59"
+                "timestamp": "20220125T13:52:34",
+                "sale_id": "0188146f-5360-408b-a7c5-3414077ceb59"
             },
             {
                 "store": "Djuristen",
-                "timestamp": "2022-01-26T15:24:45",
-                "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb"
+                "timestamp": "20220126T15:24:45",
+                "sale_id": "726ac398-209d-49df-ab6a-682b7af8abfb"
             },
             {
                 "store": "Den Lilla Djurbutiken",
-                "timestamp": "2022-02-07T09:00:56",
-                "saleid": "602fbf9d-2b4a-4de2-b108-3be3afa372ae"
+                "timestamp": "20220207T09:00:56",
+                "sale_id": "602fbf9d-2b4a-4de2-b108-3be3afa372ae"
             },
             {
                 "store": "Den Stora Djurbutiken",
-                "timestamp": "2022-02-27T12:32:46",
-                "saleid": "51071ca1-0179-4e67-8258-89e34b205a1e"
+                "timestamp": "20220227T12:32:46",
+                "sale_id": "51071ca1-0179-4e67-8258-89e34b205a1e"
             }
         ]
     }

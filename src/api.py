@@ -109,11 +109,16 @@ def sales():
     with app.db.cursor() as cur:
         cur.execute("""SELECT stores.name, sales.time, sales.id
                     FROM stores
-                    INNER JOIN sales
+                    JOIN sales
                     ON stores.id = sales.store;""")
-        data = cur.fetchall()
-        data = {"data": [{"store": d[0], "timestamp": d[1], "saleid": d[2]} for d in data]}
-        return data
+        dbdata = cur.fetchall()
+        data = []
+        for items in dbdata:
+            name, date_time, sale_id = items
+            date_time = str(date_time).replace(" ", "T").replace("-", "")
+            data.append({"store": name, "timestamp": date_time,
+                    "sale_id": str(sale_id)})
+        return {"data": data}
 
 
 @app.get("/sales/{saleid}")
