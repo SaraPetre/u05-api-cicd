@@ -117,7 +117,7 @@ def sales():
             name, date_time, sale_id = items
             date_time = str(date_time).replace(" ", "T").replace("-", "")
             data.append({"store": name, "timestamp": date_time,
-                    "sale_id": str(sale_id)})
+                         "sale_id": str(sale_id)})
         return {"data": data}
 
 
