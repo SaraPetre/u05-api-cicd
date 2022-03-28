@@ -122,41 +122,6 @@ def sales():
     return {"data": data}
 
 
-#@app.get("/sale/{saleid}")
-#def sale(saleid=None):
-#    '''
-#    Returns store name,date/time,saleid, product name and quantity for
-#    a specific sale.
-#    '''
-#
-#    # saknar tidsformattering
-#
-#    try:
-#        uuid.UUID(saleid)
-#    except ValueError as err:
-#        raise HTTPException(status_code=422,
-#                            detail="422 Unprocessable entry") from err
-#
-#    with app.db.cursor() as cur:
-#        cur.execute("""SELECT stores.name, sales.time, sales.store,
-#                    sales.id,sold_products.product,
-#                    sold_products.quantity, products.name
-#                    FROM sales
-#                    INNER JOIN stores ON stores.id = sales.store
-#                    INNER JOIN sold_products ON sales.id
-#                    = sold_products.sale
-#                    INNER JOIN products ON products.id
-#                    = sold_products.product
-#                    where sold_products.sale = %s;""", [saleid])
-#        data = cur.fetchall()
-#        if not data:
-#            raise HTTPException(status_code=404, detail="404 Not found")
-#
-#        data = {"data": [{"store": d[0], "timestamp": d[1], "saleid": d[3],
-#                "products":[{"name": d[6], "qty": d[5]}]} for d in data]}
-#        return data
-
-
 @app.get("/sale/{saleid}")
 def sale(saleid=None):
     '''
@@ -185,9 +150,9 @@ def sale(saleid=None):
         data = []
         data_for_products = []
         for d in dbdata:
-           store_name, timestamp, sale_id, quantity, produkt_name = d
-           timestamp = str(timestamp).replace(" ", "T").replace("-", "")
-           data_for_products.append({"name":produkt_name, "qty":quantity})
-           data.append({"store": store_name, "timestamp": timestamp,
-                        "saleid": sale_id, "products": data_for_products})
+            store_name, timestamp, sale_id, quantity, produkt_name = d
+            timestamp = str(timestamp).replace(" ", "T").replace("-", "")
+            data_for_products.append({"name": produkt_name, "qty": quantity})
+            data.append({"store": store_name, "timestamp": timestamp,
+                         "saleid": sale_id, "products": data_for_products})
         return {"data:": data[0]}
