@@ -187,7 +187,7 @@ def sale(saleid=None):
         for d in dbdata:
            store_name, timestamp, sale_id, quantity, produkt_name = d
            timestamp = str(timestamp).replace(" ", "T").replace("-", "")
+           data_for_products.append({"name":produkt_name, "qty":quantity})
            data.append({"store": store_name, "timestamp": timestamp,
-                        "saleid": sale_id})
-           data_for_products.append({"name": produkt_name, "qty": quantity})
-        return {"data:":data[0], "products": [data_for_products]}
+                        "saleid": sale_id, "products": data_for_products})
+        return {"data:": data[0]}
