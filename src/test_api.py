@@ -208,3 +208,29 @@ def test_sales_id_not_exist():
     response = client.get("/sale/726ac398-209d-49df-ab6a-682b7af8ab80")
     assert response.status_code == 404
     assert response.json() == {"detail": "404 Not found"}
+
+
+def test_sales_id_store_two_products():
+    """
+    Tests the return of two valid saleids.
+    """
+    startup()
+    response = client.get("/sale/0188146f-5360-408b-a7c5-3414077ceb59")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data:": {
+            "store": "Den Stora Djurbutiken",
+            "timestamp": "20220125T13:52:34",
+            "saleid": "0188146f-5360-408b-a7c5-3414077ceb59",
+            "products": [
+              {
+                "name": "Hundmat",
+                "qty": 3
+              },
+              {
+                "name": "Sömnpiller och energidryck för djur",
+                "qty": 12
+              }
+            ]
+        }
+    }
