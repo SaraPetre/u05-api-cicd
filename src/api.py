@@ -153,4 +153,4 @@ def sale(saleid=None):
             data_for_products.append({"name": produkt_name, "qty": quantity})
             data.append({"store": store_name, "timestamp": timestamp,
                          "saleid": sale_id, "products": data_for_products})
-        return {"data:": data[0]}
+        return {"data": data[0]}
