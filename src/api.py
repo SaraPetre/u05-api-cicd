@@ -5,19 +5,27 @@ This is just a tribute!
 
 import uuid
 
-import psycopg
 from fastapi import FastAPI, HTTPException
 
+import psycopg
 
 app = FastAPI()
 
 
+@app.get("/")
+def read_main():
+    """The root endpoint, simply says hi to the user :)
+
+
+    """
+    return {"msg": "Hello, World!"}
+
+
 @app.on_event("startup")
 def startup():
-    '''
-    Open database connection
-    '''
-    app.db = psycopg.connect(
+    "D"
+
+    app.db = psycopg.connect(  # pragma: no cover
         """dbname=u05 user=postgres host=doe21-db.grinton.dev
          password=DjExUSMcwWpzXziT port=5432""")
     # postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05
@@ -25,10 +33,8 @@ def startup():
 
 @app.on_event("shutdown")
 def shutdown():
-    '''
-    Close database connection
-    '''
-    app.db.close()
+    "D"
+    app.db.close()  # pragma: no cover
 
 
 @app.get("/")
@@ -36,7 +42,22 @@ def main():
     '''
     Returns a welcome message
     '''
-    return {"msg": "Hello, World!"}
+
+    with app.db.cursor() as cur:
+        cur.execute("""select stores.name, store_addresses.address,
+                    store_addresses.zip,
+                    store_addresses.city
+                    from stores
+                    join store_addresses
+                    on stores.id = store_addresses.store
+                    where name = %s;""", [specifik])
+        sname = cur.fetchall()
+        if sname:
+            sname = sname[0]
+        else:
+            raise HTTPException(status_code=404, detail=f"Store {specifik} not found!")
+        result = {"data": {"name": sname[0], "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
+        return result
 
 
 @app.get("/stores")
@@ -45,11 +66,10 @@ def stores():
     This endpoint returns data on stores (name and complete adress)
     '''
     with app.db.cursor() as cur:
-        cur.execute('''SELECT stores.name, store_addresses.address,
-                    store_addresses.zip, store_addresses.city
-                    FROM stores JOIN store_addresses on stores.id
-                    = store_addresses.store;
-                    ''')
+        cur.execute("""select stores.name, store_addresses.address, store_addresses.zip,
+                    store_addresses.city
+                    from stores
+                    join store_addresses on stores.id = store_addresses.store""")
         data = cur.fetchall()
         data = [{"name": d[0], "address": f"{d[1]}, {d[2]} {d[3]}"}
                 for d in data]
@@ -84,17 +104,16 @@ def specific_store(storename=None):
 
 
 @app.get("/cities")
-def city(zip=None):
+def city(zipcode=None):
     '''
     This endpoint returns data on all unique cities where a store
     is located. The query can be filtered if a zip-parameter is given.
     '''
     with app.db.cursor() as cur:
-        if not zip:
+        if not zipcode:
             cur.execute("SELECT DISTINCT city FROM store_addresses;")
         else:
-            cur.execute("SELECT city FROM store_addresses WHERE zip\
-                        = %s;", [zip])
+            cur.execute("SELECT city FROM store_addresses WHERE zip = %s;", [zipcode])
         names = cur.fetchall()
         result = {"data": [name[0] for name in names]}
         return result
@@ -103,7 +122,15 @@ def city(zip=None):
 @app.get("/sales")
 def sales():
     '''
-    Returns storename, time, saleid
+    GET /sales : Denna endpoint ska returnera en lista över alla transak-
+    tioner, i denna format:
+    {”data” : [
+    {”store” : ”Store name” ,
+    ”timestamp” : ”yyyymmdd hh:mm:ss” ,
+    ”saleid” : ”uuid for the transaction here”},
+    ...
+    ]
+    }
     '''
     with app.db.cursor() as cur:
         cur.execute("""SELECT stores.name, sales.time, sales.id
@@ -111,29 +138,32 @@ def sales():
                     JOIN sales
                     ON stores.id = sales.store;""")
         dbdata = cur.fetchall()
-    data = []
-    for items in dbdata:
-        name, date_time, sale_id = items
-        date_time = str(date_time).replace(" ", "T").replace("-", "")
-        data.append({"store": name, "timestamp": date_time,
-                    "sale_id": str(sale_id)})
-    return {"data": data}
+        data = []
+        for items in dbdata:
+            name, date_time, sale_id = items
+            date_time = str(date_time).replace(" ", "T").replace("-", "")
+            data.append({"store": name, "timestamp": date_time,
+                         "sale_id": str(sale_id)})
+        return {"data": data}
 
 
-@app.get("/sale/{saleid}")
-def sale(saleid=None):
+@app.get("/sales/{saleid}")
+def sales_id(saleid=None):
     '''
     Returns store name,date/time,saleid, product name and quantity for
     a specific sale.
     '''
+
+    # saknar tidsformattering
+
     try:
         uuid.UUID(saleid)
     except ValueError as err:
-        raise HTTPException(status_code=422,
-                            detail="422 Unprocessable entry") from err
+        raise HTTPException(status_code=422, detail="422 Unprocessable entry") from err
 
     with app.db.cursor() as cur:
-        cur.execute("""SELECT stores.name, sales.time, sales.id,
+        cur.execute("""SELECT stores.name, sales.time, sales.store,
+                    sold_products.sale,sold_products.product,
                     sold_products.quantity, products.name
                     FROM sales
                     INNER JOIN stores ON stores.id = sales.store
@@ -141,16 +171,11 @@ def sale(saleid=None):
                     = sold_products.sale
                     INNER JOIN products ON products.id
                     = sold_products.product
-                    where sales.id = %s;""", [saleid])
-        dbdata = cur.fetchall()
-        if not dbdata:
+                    where sold_products.sale = %s;""", [saleid])
+        data = cur.fetchall()
+        if not data:
             raise HTTPException(status_code=404, detail="404 Not found")
-        data = []
-        data_for_products = []
-        for items_in_data in dbdata:
-            store_name, timestamp, sale_id, quantity, produkt_name = items_in_data
-            timestamp = str(timestamp).replace(" ", "T").replace("-", "")
-            data_for_products.append({"name": produkt_name, "qty": quantity})
-            data.append({"store": store_name, "timestamp": timestamp,
-                         "saleid": sale_id, "products": data_for_products})
-        return {"data:": data[0]}
+
+        data = {"data": [{"store": d[0], "timestamp": d[1], "saleid": d[3],
+                "products": [{"name": d[6], "qty": d[5]}]} for d in data]}
+        return data

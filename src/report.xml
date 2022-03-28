@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="3.482" timestamp="2022-03-24T14:23:26.056098" hostname="LAPTOP-LAR3R2HH"><testcase classname="test_api" name="test_read_main" time="0.213" /><testcase classname="test_api" name="test_specific_store_not_in_list" time="0.193" /><testcase classname="test_api" name="test_stores_in_list" time="0.214" /><testcase classname="test_api" name="test_stores" time="0.172" /><testcase classname="test_api" name="test_cities" time="0.189" /><testcase classname="test_api" name="test_cities_zip" time="0.187"><failure message="TypeError: string indices must be integers">def test_cities_zip():
+        """This test checks a call to GET /cities with a zip query
+        added.
+        """
+        data = list(filter(lambda x: x[-1] == "Hudiksvall",
+                           return_data_cities))
+        startup()
+        response = client.get("/cities", params={
+                                  "zip": "55555"})
+        assert response.status_code == 200
+&gt;       assert response.json() == list(filter(
+            lambda x: x["store_addresses"] == "Hudiksvall", return_data_cities))
+
+test_api.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = 'data'
+
+&gt;   assert response.json() == list(filter(
+        lambda x: x["store_addresses"] == "Hudiksvall", return_data_cities))
+E   TypeError: string indices must be integers
+
+test_api.py:133: TypeError</failure></testcase></testsuite></testsuites>
