@@ -1,4 +1,7 @@
-"Realy Time to add info here Sara"
+"""
+This is not the greatest project in the world, no.
+This is just a tribute!
+"""
 
 import uuid
 
@@ -25,6 +28,7 @@ def startup():
     app.db = psycopg.connect(  # pragma: no cover
         """dbname=u05 user=postgres host=doe21-db.grinton.dev
          password=DjExUSMcwWpzXziT port=5432""")
+    # postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05
 
 
 @app.on_event("shutdown")
@@ -33,12 +37,10 @@ def shutdown():
     app.db.close()  # pragma: no cover
 
 
-@app.get("/stores/{specifik}")
-def specific_store(specifik):
+@app.get("/")
+def main():
     '''
-    returnera data (namn och fullständig address) för en specifik
-    butik, vald via namn om ett namn som inte finns i DB anges,
-    returnera 404 Not Found
+    Returns a welcome message
     '''
 
     with app.db.cursor() as cur:
@@ -63,25 +65,49 @@ def stores():
     '''
     This endpoint returns data on stores (name and complete adress)
     '''
-
     with app.db.cursor() as cur:
         cur.execute("""select stores.name, store_addresses.address, store_addresses.zip,
                     store_addresses.city
                     from stores
                     join store_addresses on stores.id = store_addresses.store""")
         data = cur.fetchall()
-        data = [{"name": d[0], "address": f"{d[1]}, {d[2]} {d[3]}"} for d in data]
+        data = [{"name": d[0], "address": f"{d[1]}, {d[2]} {d[3]}"}
+                for d in data]
         result = {"data": data}
         return result
+
+
+@app.get("/stores/{storename}")
+def specific_store(storename=None):
+    '''
+    Returns store name and address for a specific store chosen by name,
+    if no/wrong name is given return 404 Not Found.
+    '''
+
+    with app.db.cursor() as cur:
+        cur.execute("""select stores.name, store_addresses.address,
+                    store_addresses.zip, store_addresses.city
+                    from stores
+                    join store_addresses
+                    on stores.id = store_addresses.store where name
+                    = %s;""", [storename])
+        sname = cur.fetchall()
+        if not sname:
+            raise HTTPException(status_code=404, detail=f'Store {storename} not found!')
+
+        if sname:
+            sname = sname[0]
+            result = {"data": {"name": sname[0],
+                      "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
+            return result
+        return None
 
 
 @app.get("/cities")
 def city(zipcode=None):
     '''
-    Denna endpoint returnerar alla unika städer där en butik finns.
-
-    Om query-parameter zip är given, den filtrerar med den och visar
-    bara städer med den specifika postkod.
+    This endpoint returns data on all unique cities where a store
+    is located. The query can be filtered if a zip-parameter is given.
     '''
     with app.db.cursor() as cur:
         if not zipcode:
