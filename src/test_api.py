@@ -174,19 +174,17 @@ def test_sales_id_valid():
     response = client.get("/sale/726ac398-209d-49df-ab6a-682b7af8abfb")
     assert response.status_code == 200
     assert response.json() == {
-        "data": [
-            {
-                "store": "Djuristen",
-                "timestamp": "20220126T15:24:45",
-                "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb",
-                "products": [
-                    {
-                        "name": "Elefantkoppel",
-                        "qty": 1
-                    }
-                ]
-            }
-        ]
+        "data": {
+            "store": "Djuristen",
+            "timestamp": "20220126T15:24:45",
+            "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb",
+            "products": [
+                {
+                    "name": "Elefantkoppel",
+                    "qty": 1
+                }
+            ]
+        }
     }
 
 
