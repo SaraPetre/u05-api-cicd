@@ -171,7 +171,7 @@ def test_sales_id_valid():
     Tests the return of valid saleid.
     """
     startup()
-    response = client.get("/sales/726ac398-209d-49df-ab6a-682b7af8abfb")
+    response = client.get("/sale/726ac398-209d-49df-ab6a-682b7af8abfb")
     assert response.status_code == 200
     assert response.json() == {
         "data": [
