@@ -216,7 +216,7 @@ def test_sales_id_store_two_products():
     response = client.get("/sale/0188146f-5360-408b-a7c5-3414077ceb59")
     assert response.status_code == 200
     assert response.json() == {
-        "data:": {
+        "data": {
             "store": "Den Stora Djurbutiken",
             "timestamp": "20220125T13:52:34",
             "saleid": "0188146f-5360-408b-a7c5-3414077ceb59",
