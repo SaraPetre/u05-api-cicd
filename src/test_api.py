@@ -177,7 +177,7 @@ def test_sales_id_valid():
         "data": [
             {
                 "store": "Djuristen",
-                "timestamp": "2022-01-26T15:24:45",
+                "timestamp": "20220126T15:24:45",
                 "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb",
                 "products": [
                     {
@@ -195,7 +195,7 @@ def test_sales_id_not_valid():
     Tests the return of s
     """
     startup()
-    response = client.get("/sales/726ac398-209d-49df-ab6a-682b7af8")
+    response = client.get("/sale/726ac398-209d-49df-ab6a-682b7af8")
     assert response.status_code == 422
     assert response.json() == {"detail": "422 Unprocessable entry"}
 
@@ -205,6 +205,6 @@ def test_sales_id_not_exist():
     Tests the return of
     """
     startup()
-    response = client.get("/sales/726ac398-209d-49df-ab6a-682b7af8ab80")
+    response = client.get("/sale/726ac398-209d-49df-ab6a-682b7af8ab80")
     assert response.status_code == 404
     assert response.json() == {"detail": "404 Not found"}
