@@ -223,14 +223,14 @@ def test_sales_id_store_two_products():
             "timestamp": "20220125T13:52:34",
             "saleid": "0188146f-5360-408b-a7c5-3414077ceb59",
             "products": [
-              {
-                "name": "Hundmat",
-                "qty": 3
-              },
-              {
-                "name": "Sömnpiller och energidryck för djur",
-                "qty": 12
-              }
+                {
+                    "name": "Hundmat",
+                    "qty": 3
+                },
+                {
+                    "name": "Sömnpiller och energidryck för djur",
+                    "qty": 12
+                }
             ]
         }
     }
