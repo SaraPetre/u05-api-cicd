@@ -1,0 +1,10 @@
+fastapi[all]
+psycopg[binary]
+pytest
+uvicorn
+requests
+pylint
+autopep8
+pytest-cov
+pipenv
+flake8

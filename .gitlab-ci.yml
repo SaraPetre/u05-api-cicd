@@ -1,0 +1,84 @@
+
+image: python:3.9
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+stages:
+  - code_quality
+  - tests         # List of stages for jobs, and their order of execution
+  - build
+  - deploy
+
+.some-script-before: &some-script-before
+    - python --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+
+"Ensure PEP8-compliancy":
+  stage: code_quality
+  before_script:
+    - *some-script-before
+  script:
+    - pycodestyle --ignore=E501 src/*.py
+
+"Lint code with pylint":
+  stage: code_quality
+  before_script:
+    - *some-script-before
+  script:
+    - pylint src/*.py
+
+"Run flake8":
+  stage: code_quality
+  before_script:
+    - *some-script-before
+  script:
+      flake8 --ignore=E501 src/*.py
+
+"Run unit tests":
+  stage: tests
+  before_script:
+    - *some-script-before
+  script:
+    - pytest -v src/*.py
+
+"Build and push docker image": # This job runs in the build stage, which runs first.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+
+"unit-test-job":   # This job runs in the test stage.
+  stage: tests    # It only starts when the job in the build stage completes successfully.
+  script:
+    - echo "Running unit tests... This will take about 60 seconds."
+    - sleep 60
+    - echo "Code coverage is 90%"
+
+"lint-test-job":   # This job also runs in the test stage.
+  stage: tests    # It can run at the same time as unit-test-job (in parallel).
+  script:
+    - echo "Linting code... This will take about 10 seconds."
+    - sleep 10
+    - echo "No lint issues found."
+
+"deploy-job":      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
