@@ -4,11 +4,9 @@ This is just a tribute!
 """
 
 import uuid
-from collections import namedtuple
-from typing import List, Optional
 
 import psycopg
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import FastAPI, HTTPException
 
 
 app = FastAPI()
@@ -149,8 +147,8 @@ def sale(saleid=None):
             raise HTTPException(status_code=404, detail="404 Not found")
         data = []
         data_for_products = []
-        for d in dbdata:
-            store_name, timestamp, sale_id, quantity, produkt_name = d
+        for items_in_data in dbdata:
+            store_name, timestamp, sale_id, quantity, produkt_name = items_in_data
             timestamp = str(timestamp).replace(" ", "T").replace("-", "")
             data_for_products.append({"name": produkt_name, "qty": quantity})
             data.append({"store": store_name, "timestamp": timestamp,
