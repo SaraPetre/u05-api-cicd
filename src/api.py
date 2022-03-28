@@ -84,17 +84,17 @@ def specific_store(storename=None):
 
 
 @app.get("/cities")
-def city(zip=None):
+def city(zipcode=None):
     '''
     This endpoint returns data on all unique cities where a store
     is located. The query can be filtered if a zip-parameter is given.
     '''
     with app.db.cursor() as cur:
-        if not zip:
+        if not zipcode:
             cur.execute("SELECT DISTINCT city FROM store_addresses;")
         else:
             cur.execute("SELECT city FROM store_addresses WHERE zip\
-                        = %s;", [zip])
+                        = %s;", [zipcode])
         names = cur.fetchall()
         result = {"data": [name[0] for name in names]}
         return result
