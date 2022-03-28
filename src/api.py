@@ -124,7 +124,7 @@ def sales():
 def sale(saleid=None):
     '''
     Returns store name,date/time,saleid, product name and quantity for
-    a specific sale.
+    a specific sale..
     '''
     try:
         uuid.UUID(saleid)
