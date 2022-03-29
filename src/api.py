@@ -57,7 +57,7 @@ def stores():
 
 
 @app.get("/stores/{storename}")
-def specific_store(storename):
+def specific_store(storename=None):
     '''
     Returns store name and address for a specific store chosen by name,
     if no/wrong name is given return 404 Not Found.
@@ -79,6 +79,7 @@ def specific_store(storename):
             result = {"data": {"name": sname[0],
                       "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
             return result
+        return None
 
 
 @app.get("/cities")
