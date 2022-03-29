@@ -107,7 +107,7 @@ def sales():
                     FROM stores
                     JOIN sales
                     ON stores.id = sales.store;""")
-            dbdata = cur.fetchall()
+        dbdata = cur.fetchall()
         data = []
         for items in dbdata:
             name, date_time, sale_id = items
@@ -129,24 +129,24 @@ def sales_id(saleid=None):
         raise HTTPException(status_code=422, detail="422 Unprocessable entry") from err
 
     with app.db.cursor() as cur:
-    cur.execute("""SELECT stores.name, sales.time, sales.id,
-                sold_products.quantity, products.name
-                FROM sales
-                INNER JOIN stores ON stores.id = sales.store
-                INNER JOIN sold_products ON sales.id
-                = sold_products.sale
-                INNER JOIN products ON products.id
-                = sold_products.product
-                where sales.id = %s;""", [saleid])
-    dbdata = cur.fetchall()
-    if not dbdata:
-        raise HTTPException(status_code=404, detail="404 Not found")
-    data = []
-    data_for_products = []
-    for items_in_data in dbdata:
-        store_name, timestamp, sale_id, quantity, produkt_name = items_in_data
-        timestamp = str(timestamp).replace(" ", "T").replace("-", "")
-        data_for_products.append({"name": produkt_name, "qty": quantity})
-        data.append({"store": store_name, "timestamp": timestamp,
-                        "saleid": sale_id, "products": data_for_products})
-    return {"data": data[0]}
+        cur.execute("""SELECT stores.name, sales.time, sales.id,
+                    sold_products.quantity, products.name
+                    FROM sales
+                    INNER JOIN stores ON stores.id = sales.store
+                    INNER JOIN sold_products ON sales.id
+                    = sold_products.sale
+                    INNER JOIN products ON products.id
+                    = sold_products.product
+                    where sales.id = %s;""", [saleid])
+        dbdata = cur.fetchall()
+        if not dbdata:
+            raise HTTPException(status_code=404, detail="404 Not found")
+        data = []
+        data_for_products = []
+        for items_in_data in dbdata:
+            store_name, timestamp, sale_id, quantity, produkt_name = items_in_data
+            timestamp = str(timestamp).replace(" ", "T").replace("-", "")
+            data_for_products.append({"name": produkt_name, "qty": quantity})
+            data.append({"store": store_name, "timestamp": timestamp,
+                         "saleid": sale_id, "products": data_for_products})
+        return {"data": data[0]}
