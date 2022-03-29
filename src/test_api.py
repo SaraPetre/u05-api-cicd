@@ -174,7 +174,7 @@ def test_sales_id_valid():
     response = client.get("/sales/726ac398-209d-49df-ab6a-682b7af8abfb")
     assert response.status_code == 200
     assert response.json() == {
-        "data": [
+        "data": {
             {
                 "store": "Djuristen",
                 "timestamp": "2022-01-26T15:24:45",
@@ -186,7 +186,7 @@ def test_sales_id_valid():
                     }
                 ]
             }
-        ]
+        }
     }
 
 
