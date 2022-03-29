@@ -176,7 +176,7 @@ def test_sales_id_valid():
     assert response.json() == {
         "data": {
             "store": "Djuristen",
-            "timestamp": "2022-01-26T15:24:45",
+            "timestamp": "20220126T15:24:45",
             "saleid": "726ac398-209d-49df-ab6a-682b7af8abfb",
             "products": [
                 {
