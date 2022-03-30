@@ -232,6 +232,66 @@ def test_sales_id_store_two_products():
         }
     }
 
+def test_get_income():
+    '''
+    The test returnes status code 200 and data when NO query is used.
+    '''
+    startup()
+    response = client.get("/income")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Sömnpiller och energidryck för djur",
+                "price": 9.95,
+                "quantity": 12,
+                "sale_time": "2022-01-25T13:52:34",
+                "discount": 9
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Hundmat",
+                "price": 109,
+                "quantity": 3,
+                "sale_time": "2022-01-25T13:52:34",
+                "discount": None
+            },
+            {
+                "store_name": "Djuristen",
+                "product_name": "Elefantkoppel",
+                "price": 459,
+                "quantity": 1,
+                "sale_time": "2022-01-26T15:24:45",
+                "discount": 13
+            },
+            {
+                "store_name": "Den Lilla Djurbutiken",
+                "product_name": "Kattmat",
+                "price": 109,
+                "quantity": 57,
+                "sale_time": "2022-02-07T09:00:56",
+                "discount": None
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattklonare",
+                "price": 55900,
+                "quantity": 1,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": 25
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattmat",
+                "price": 109,
+                "quantity": 10,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": None
+            }
+        ]
+    }
+
 
 def test_get_income_one_store():
     '''
@@ -288,6 +348,36 @@ def test_get_income_valid_products_uuid():
     shutdown()
 
 
+def test_get_income_two_valid_products_uuid():
+    '''
+    The test returnes status code 200 and data for products
+    '''
+    startup()
+    response = client.get("/income?product=19e67404-6e35-45b7-8d6f-e5bc5b79c453&product=eb4d618c-122d-4428-b022-38aa1ad36fe0")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+                "store_name": "Djuristen",
+                "product_name": "Elefantkoppel",
+                "price": 459,
+                "quantity": 1,
+                "sale_time": "2022-01-26T15:24:45",
+                "discount": 13
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattklonare",
+                "price": 55900,
+                "quantity": 1,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": 25
+            }
+        ]
+    }
+    shutdown()
+
+
 def test_get_income_not_valid_product_uuid():
     '''
     The test returnes status code 422 if we give an invalid UUID for store Djuristen.
@@ -296,4 +386,61 @@ def test_get_income_not_valid_product_uuid():
     response = client.get("/income?product=19e67404-6e35-45b7-8d6f-e5bc5b79c4511")
     assert response.status_code == 422
     assert response.json() == {"detail": "Invalid UUID given for product!"}
+    shutdown()
+
+
+def test_get_income_from():
+    '''
+    The test returnes status code 200 and data when query from is used.
+    '''
+    startup()
+    response = client.get("/income?from=2022-01-26")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+                "store_name": "Djuristen",
+                "product_name": "Elefantkoppel",
+                "price": 459,
+                "quantity": 1,
+                "sale_time": "2022-01-26T15:24:45",
+                "discount": 13
+            },
+            {
+                "store_name": "Den Lilla Djurbutiken",
+                "product_name": "Kattmat",
+                "price": 109,
+                "quantity": 57,
+                "sale_time": "2022-02-07T09:00:56",
+                "discount": None
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattklonare",
+                "price": 55900,
+                "quantity": 1,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": 25
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattmat",
+                "price": 109,
+                "quantity": 10,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": None
+            }
+        ]
+    }
+    shutdown()
+
+
+def test_get_income_not_valid_datetime():
+    '''
+    The test returnes status code 422 if we give an invalid datetime.
+    '''
+    startup()
+    response = client.get("/income?from=22-02-07T09%3A00%3A56")
+    assert response.status_code == 422
+    assert response.json() == {"detail": "Invalid datetime format!"}
     shutdown()
