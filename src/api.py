@@ -161,8 +161,8 @@ def sale(saleid=None):
 # list-of-lists data format returned by cursor.fetchall into dictionaries
 # ready to be returned as JSON.
 QueryResultIncome = namedtuple("QueryResultIncome",
-                              ("store_name", "product_name", "price",
-                              "quantity", "sale_time", "discount"))
+                               ("store_name", "product_name", "price",
+                               "quantity", "sale_time", "discount"))
 
 
 @app.get("/income")
