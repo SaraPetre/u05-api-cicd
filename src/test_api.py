@@ -244,12 +244,12 @@ def test_get_income_one_store():
     assert response.json() == {
         "data": [
             {
-            "store_name": "Djuristen",
-            "product_name": "Elefantkoppel",
-            "price": 459,
-            "quantity": 1,
-            "sale_time": "2022-01-26T15:24:45",
-            "discount": 13
+                "store_name": "Djuristen",
+                "product_name": "Elefantkoppel",
+                "price": 459,
+                "quantity": 1,
+                "sale_time": "2022-01-26T15:24:45",
+                "discount": 13
             }
         ]
     }
