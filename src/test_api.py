@@ -135,7 +135,6 @@ def test_sales():
     """
     Test the respons of GET/sales.
     """
-    
     startup()
     response = client.get("/sales")
     assert response.status_code == 200
@@ -272,7 +271,7 @@ def test_get_income_valid_products_uuid():
     The test returnes status code 200 and data for products
     '''
     startup()
-    response = client.get("/income?products=19e67404-6e35-45b7-8d6f-e5bc5b79c453")
+    response = client.get("/income?product=19e67404-6e35-45b7-8d6f-e5bc5b79c453")
     assert response.status_code == 200
     assert response.json() == {
         "data": [
@@ -289,12 +288,12 @@ def test_get_income_valid_products_uuid():
     shutdown()
 
 
-def test_get_income_not_valid_products_uuid():
+def test_get_income_not_valid_product_uuid():
     '''
     The test returnes status code 422 if we give an invalid UUID for store Djuristen.
     '''
     startup()
-    response = client.get("/income?products=19e67404-6e35-45b7-8d6f-e5bc5b79c4511")
+    response = client.get("/income?product=19e67404-6e35-45b7-8d6f-e5bc5b79c4511")
     assert response.status_code == 422
     assert response.json() == {"detail": "Invalid UUID given for product!"}
     shutdown()
