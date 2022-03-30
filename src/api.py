@@ -21,7 +21,7 @@ def startup():
     '''
     app.db = psycopg.connect(
         """dbname=u05 user=postgres host=doe21-db.grinton.dev
-         password=DjExUSMcwWpzXziT port=5432""") # pragma: no cover
+         password=DjExUSMcwWpzXziT port=5432""")  # pragma: no cover
 
 
 @app.on_event("shutdown")
@@ -29,7 +29,7 @@ def shutdown():
     '''
     Close database connection
     '''
-    app.db.close() # pragma: no cover
+    app.db.close()  # pragma: no cover
 
 
 @app.get("/")
@@ -212,10 +212,10 @@ def get_income(store: Optional[List[str]] = Query(None),
         parameters.append(to_)
     query = """SELECT stores.name, products.name, prices.price,
                sold_products.quantity, sales.time, discounts.discount_percent
-               FROM sold_products 
-               JOIN products on sold_products.product = products.id 
-               JOIN sales ON sold_products.sale = sales.id 
-               JOIN stores ON sales.store = stores.id 
+               FROM sold_products
+               JOIN products on sold_products.product = products.id
+               JOIN sales ON sold_products.sale = sales.id
+               JOIN stores ON sales.store = stores.id
                JOIN prices ON products.id = prices.product
                LEFT JOIN discounts ON products.id = discounts.product
                {stores} {products} {from_} {to}

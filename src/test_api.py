@@ -232,3 +232,36 @@ def test_sales_id_store_two_products():
             ]
         }
     }
+
+
+def test_get_income_one_store():
+    '''
+    The test returnes status code 200 if we get the result wanted for store Djuristen.
+    '''
+    startup()
+    response = client.get("/income?store=75040436-56de-401b-8919-8d0063ac9dd7")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+            "store_name": "Djuristen",
+            "product_name": "Elefantkoppel",
+            "price": 459,
+            "quantity": 1,
+            "sale_time": "2022-01-26T15:24:45",
+            "discount": 13
+            }
+        ]
+    }
+    shutdown()
+
+
+def test_get_income_not_valid_store_UUID():
+    '''
+    The test returnes status code 422 if we give an invalid UUID for store Djuristen.
+    '''
+    startup()
+    response = client.get("/income?store=75040436-56de-401b-8919-8d0063ac9d")
+    assert response.status_code == 422
+    assert response.json() == {"detail": "Invalid UUID given for store!"}
+    shutdown()
