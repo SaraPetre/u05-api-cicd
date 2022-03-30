@@ -265,3 +265,36 @@ def test_get_income_not_valid_store_uuid():
     assert response.status_code == 422
     assert response.json() == {"detail": "Invalid UUID given for store!"}
     shutdown()
+
+
+def test_get_income_valid_products_uuid():
+    '''
+    The test returnes status code 200 and data for products
+    '''
+    startup()
+    response = client.get("/income?products=19e67404-6e35-45b7-8d6f-e5bc5b79c453")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattklonare",
+                "price": 55900,
+                "quantity": 1,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": 25
+            }
+        ]
+    }
+    shutdown()
+
+
+def test_get_income_not_valid_products_uuid():
+    '''
+    The test returnes status code 422 if we give an invalid UUID for store Djuristen.
+    '''
+    startup()
+    response = client.get("/income?products=19e67404-6e35-45b7-8d6f-e5bc5b79c4511")
+    assert response.status_code == 422
+    assert response.json() == {"detail": "Invalid UUID given for product!"}
+    shutdown()
