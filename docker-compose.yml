@@ -1,11 +1,23 @@
 ---
 services:
+  api:
+    build: .
+    image: myapi
+    environment:
+      APP_DB_PASSWORD: "arastest"
+    expose:
+      - 8000
+    depends_on:
+      - db
+    ports:
+      - 127.0.0.1:8000:8000
+
   db:
     image: postgres:latest
     ports:
-      - 127.0.0.1:5432:5432/tcp
+      - 127.0.0.1:5433:5432/tcp
     environment:
-      POSTGRES_PASSWORD: testpass
+      POSTGRES_PASSWORD: "arastest"
     volumes:
       - ./db_data:/var/lib/postgresql/data
       - ./shared_data:/shared_data
@@ -13,8 +25,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4:6
     environment:
-      PGADMIN_DEFAULT_EMAIL: "admin@admin.admin"
-      PGADMIN_DEFAULT_PASSWORD: "testpass"
+      PGADMIN_DEFAULT_EMAIL: "aras@aras.aras"
+      PGADMIN_DEFAULT_PASSWORD: "arastest"
     volumes:
       - ./pgadmin_data:/var/lib/pgadmin
     ports:
