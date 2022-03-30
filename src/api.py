@@ -162,7 +162,7 @@ def sale(saleid=None):
 # ready to be returned as JSON.
 QueryResultIncome = namedtuple("QueryResultIncome",
                                ("store_name", "product_name", "price",
-                               "quantity", "sale_time", "discount"))
+                                "quantity", "sale_time", "discount"))
 
 
 @app.get("/income")
