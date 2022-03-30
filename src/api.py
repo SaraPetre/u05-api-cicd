@@ -19,8 +19,7 @@ def startup():
     '''
     app.db = psycopg.connect(
         """dbname=u05 user=postgres host=doe21-db.grinton.dev
-         password=DjExUSMcwWpzXziT port=5432""")
-    # postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05
+         password=DjExUSMcwWpzXziT port=5432""") # pragma: no cover
 
 
 @app.on_event("shutdown")
@@ -28,7 +27,7 @@ def shutdown():
     '''
     Close database connection
     '''
-    app.db.close()
+    app.db.close() # pragma: no cover
 
 
 @app.get("/")
