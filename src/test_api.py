@@ -232,6 +232,7 @@ def test_sales_id_store_two_products():
         }
     }
 
+
 def test_get_income():
     '''
     The test returnes status code 200 and data when NO query is used.
@@ -353,7 +354,8 @@ def test_get_income_two_valid_products_uuid():
     The test returnes status code 200 and data for products
     '''
     startup()
-    response = client.get("/income?product=19e67404-6e35-45b7-8d6f-e5bc5b79c453&product=eb4d618c-122d-4428-b022-38aa1ad36fe0")
+    response = client.get("""/income?product=19e67404-6e35-45b7-8d6f-e5bc5b79c453&product
+                          =eb4d618c-122d-4428-b022-38aa1ad36fe0""")
     assert response.status_code == 200
     assert response.json() == {
         "data": [
