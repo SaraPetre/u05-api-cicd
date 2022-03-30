@@ -8,8 +8,7 @@ from collections import namedtuple
 from typing import List, Optional
 
 import psycopg
-from fastapi import FastAPI, Query, HTTPException
-
+from fastapi import FastAPI, HTTPException, Query
 
 app = FastAPI()
 
