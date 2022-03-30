@@ -297,4 +297,3 @@ def test_get_income_not_valid_product_uuid():
     assert response.status_code == 422
     assert response.json() == {"detail": "Invalid UUID given for product!"}
     shutdown()
-    
