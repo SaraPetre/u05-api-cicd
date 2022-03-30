@@ -75,9 +75,8 @@ def specific_store(storename):
             sname = sname[0]
         else:
             raise HTTPException(status_code=404, detail=f'Store {storename} not found!')
-
         result = {"data": {"name": sname[0],
-                      "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
+                  "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
         return result
 
 
