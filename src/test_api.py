@@ -256,7 +256,7 @@ def test_get_income_one_store():
     shutdown()
 
 
-def test_get_income_not_valid_store_UUID():
+def test_get_income_not_valid_store_uuid():
     '''
     The test returnes status code 422 if we give an invalid UUID for store Djuristen.
     '''

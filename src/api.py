@@ -157,6 +157,14 @@ def sale(saleid=None):
         return {"data": data[0]}
 
 
+# QueryResultIncome is a named tuple used to ease the parsing of
+# list-of-lists data format returned by cursor.fetchall into dictionaries
+# ready to be returned as JSON.
+QueryResultIncome = namedtuple("QueryResultIncome",
+                                ("store_name", "product_name", "price",
+                                "quantity", "sale_time", "discount"))
+
+
 @app.get("/income")
 def get_income(store: Optional[List[str]] = Query(None),
                product: Optional[List[str]] = Query(None),
@@ -231,11 +239,3 @@ def get_income(store: Optional[List[str]] = Query(None),
         raise HTTPException(status_code=422, detail="Invalid datetime format!")
     entries = [QueryResultIncome(*r)._asdict() for r in result]
     return {"data": entries}
-
-
-# QueryResultInventory is a named tuple used to ease the parsing of
-# list-of-lists data format returned by cursor.fetchall into dictionaries
-# ready to be returned as JSON.
-QueryResultInventory = namedtuple("QueryResultInventory", ("product_name",
-                                                           "adjusted_quantity",
-                                                           "store_name"))
