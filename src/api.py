@@ -161,8 +161,8 @@ def sale(saleid=None):
 # list-of-lists data format returned by cursor.fetchall into dictionaries
 # ready to be returned as JSON.
 QueryResultIncome = namedtuple("QueryResultIncome",
-                                ("store_name", "product_name", "price",
-                                "quantity", "sale_time", "discount"))
+                              ("store_name", "product_name", "price",
+                               "quantity", "sale_time", "discount"))
 
 
 @app.get("/income")
@@ -234,8 +234,9 @@ def get_income(store: Optional[List[str]] = Query(None),
         with app.db.cursor() as cur:
             cur.execute(query, parameters)
             result = cur.fetchall()
-    except psycopg.errors.Error:
+    except psycopg.errors.Error as err:
         app.db.rollback()
-        raise HTTPException(status_code=422, detail="Invalid datetime format!")
+        raise HTTPException(status_code=422,
+                            detail="Invalid datetime format!") from err
     entries = [QueryResultIncome(*r)._asdict() for r in result]
     return {"data": entries}
