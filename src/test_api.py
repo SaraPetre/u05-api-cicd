@@ -135,7 +135,6 @@ def test_sales():
     """
     Test the respons of GET/sales.
     """
-    
     startup()
     response = client.get("/sales")
     assert response.status_code == 200
