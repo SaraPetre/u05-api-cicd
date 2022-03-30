@@ -4,9 +4,11 @@ This is just a tribute!
 """
 
 import uuid
+from collections import namedtuple
+from typing import List, Optional
 
 import psycopg
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Query, HTTPException
 
 
 app = FastAPI()
@@ -19,8 +21,7 @@ def startup():
     '''
     app.db = psycopg.connect(
         """dbname=u05 user=postgres host=doe21-db.grinton.dev
-         password=DjExUSMcwWpzXziT port=5432""")
-    # postgresql://postgres:DjExUSMcwWpzXziT@doe21-db.grinton.dev/u05
+         password=DjExUSMcwWpzXziT port=5432""")  # pragma: no cover
 
 
 @app.on_event("shutdown")
@@ -28,7 +29,7 @@ def shutdown():
     '''
     Close database connection
     '''
-    app.db.close()
+    app.db.close()  # pragma: no cover
 
 
 @app.get("/")
@@ -154,3 +155,88 @@ def sale(saleid=None):
             data.append({"store": store_name, "timestamp": timestamp,
                          "saleid": sale_id, "products": data_for_products})
         return {"data": data[0]}
+
+
+# QueryResultIncome is a named tuple used to ease the parsing of
+# list-of-lists data format returned by cursor.fetchall into dictionaries
+# ready to be returned as JSON.
+QueryResultIncome = namedtuple("QueryResultIncome",
+                               ("store_name", "product_name", "price",
+                                "quantity", "sale_time", "discount"))
+
+
+@app.get("/income")
+def get_income(store: Optional[List[str]] = Query(None),
+               product: Optional[List[str]] = Query(None),
+               from_=Query(None, alias="from"), to_=Query(None, alias="to")):
+    """GET /income
+
+    Returns data in the usual format {"data": ·list-of-dicts}. Each
+    dictionary contains all info about a transaction, including price and
+    discount percent.
+
+    It accepts the following query parameters:
+        - store: (can be given more than once) UUID to filter results by store
+        - product: (can be given more than once) UUID to filter results by
+          product
+        - from: filter out all transactions before the given datestamp/timestamp
+        - to: filter out all transactions after the given datestamp/timestamp
+
+    If any invalid UUID is given (either in store or product), 422 -
+    Unprocessable Entity will be returned
+    """
+    stores_clause, products_clause, from_clause, to_clause = "", "", "", ""
+    parameters = []
+    if store:
+        try:
+            for iterator in store:
+                uuid.UUID(iterator)
+        except ValueError as err:
+            raise HTTPException(status_code=422,
+                                detail="Invalid UUID given for store!") from err
+        stores_clause = "WHERE stores.id = ANY(%s)"
+        parameters.append(store)
+    if product:
+        try:
+            for iterator in product:
+                uuid.UUID(iterator)
+        except ValueError as err:
+            raise HTTPException(
+                status_code=422,
+                detail="Invalid UUID given for product!") from err
+        products_clause = "WHERE products.id = ANY(%s)"
+        if parameters:
+            products_clause = products_clause.replace("WHERE", "AND")
+        parameters.append(product)
+    if from_:
+        from_clause = "WHERE sales.time >= %s"
+        if parameters:
+            from_clause = from_clause.replace("WHERE", "AND")
+        parameters.append(from_)
+    if to_:
+        to_clause = "WHERE sales.time <= %s"
+        if parameters:
+            to_clause = to_clause.replace("WHERE", "AND")
+        parameters.append(to_)
+    query = """SELECT stores.name, products.name, prices.price,
+               sold_products.quantity, sales.time, discounts.discount_percent
+               FROM sold_products
+               JOIN products on sold_products.product = products.id
+               JOIN sales ON sold_products.sale = sales.id
+               JOIN stores ON sales.store = stores.id
+               JOIN prices ON products.id = prices.product
+               LEFT JOIN discounts ON products.id = discounts.product
+               {stores} {products} {from_} {to}
+               ORDER BY sales.time;"""
+    query = query.format(stores=stores_clause, products=products_clause,
+                         from_=from_clause, to=to_clause)
+    try:
+        with app.db.cursor() as cur:
+            cur.execute(query, parameters)
+            result = cur.fetchall()
+    except psycopg.errors.Error as err:
+        app.db.rollback()
+        raise HTTPException(status_code=422,
+                            detail="Invalid datetime format!") from err
+    entries = [QueryResultIncome(*r)._asdict() for r in result]
+    return {"data": entries}
