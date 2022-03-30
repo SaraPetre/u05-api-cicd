@@ -14,7 +14,6 @@ The company that ordered the database model for its webshop wants to proceed wit
 
 <br />
 
-
 ### Installation
 How run to the project?
 - Create a virtual environment
