@@ -449,6 +449,36 @@ def test_get_income_not_valid_datetime():
     shutdown()
 
 
+def test_get_income_to():
+    '''
+    The test returns a list of all sales with a sale time
+    up to the given sale time.
+    '''
+    startup()
+    response = client.get("/income?to=2022-01-26")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Sömnpiller och energidryck för djur",
+                "price": 9.95,
+                "quantity": 12,
+                "sale_time": "2022-01-25T13:52:34",
+                "discount": 9
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Hundmat",
+                "price": 109,
+                "quantity": 3,
+                "sale_time": "2022-01-25T13:52:34",
+                "discount": None
+            }
+        ]
+    }
+
+
 all_inventories = [
     [
         "Hundmat",
