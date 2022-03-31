@@ -58,7 +58,7 @@ def stores():
 
 
 @app.get("/stores/{storename}")
-def specific_store(storename=None):
+def specific_store(storename):
     '''
     Returns store name and address for a specific store chosen by name,
     if no/wrong name is given return 404 Not Found.
@@ -72,15 +72,13 @@ def specific_store(storename=None):
                     on stores.id = store_addresses.store where name
                     = %s;""", [storename])
         sname = cur.fetchall()
-        if not sname:
-            raise HTTPException(status_code=404, detail=f'Store {storename} not found!')
-
         if sname:
             sname = sname[0]
-            result = {"data": {"name": sname[0],
-                      "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
-            return result
-        return None
+        else:
+            raise HTTPException(status_code=404, detail=f'Store {storename} not found!')
+        result = {"data": {"name": sname[0],
+                  "address": f"{sname[1]}, {sname[2]} {sname[3]}"}}
+        return result
 
 
 @app.get("/cities")
