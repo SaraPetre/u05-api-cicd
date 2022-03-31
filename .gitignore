@@ -1,7 +1,8 @@
-src/htmlcov/
+src/htmlcov/*
 db_data
 pgadmin_data
 shared_data
 env/*
 src/__pycache__
 src/.coverage
+src/report.xml
