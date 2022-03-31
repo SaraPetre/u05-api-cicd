@@ -1,4 +1,4 @@
-"""Minimal tests for api.py
+"""Tests for api.py
 """
 
 from types import SimpleNamespace
@@ -648,9 +648,9 @@ def test_get_inventory_store_and_product():
         "store": "676df1a1-f1d1-4ac5-9ee3-c58dfe820927"
     })
     assert response.status_code == 200
-    assert response.json() == list(
-        filter(
-            lambda x: x["store_name"] == "Den Stora Djurbutiken" and x["product_name"] == "Hundmat", return_data))
+    assert response.json() == list(filter(
+        lambda x: x
+        ["store_name"] == "Den Stora Djurbutiken" and x["product_name"] == "Hundmat", return_data))
 
 
 def test_get_inventory_erroneous_store():
