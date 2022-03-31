@@ -573,7 +573,6 @@ def test_get_inventory():
     parameters.
     """
     app.db = db_mock(all_inventories)
-    client = TestClient(app)
     response = client.get("/inventory")
     assert response.status_code == 200
     assert response.json() == return_data
@@ -585,7 +584,6 @@ def test_get_inventory_store():
     data = list(filter(lambda x: x[-1] == "Den Stora Djurbutiken",
                        all_inventories))
     app.db = db_mock(data)
-    client = TestClient(app)
     response = client.get("/inventory",
                           params={
                               "store": "676df1a1-f1d1-4ac5-9ee3-c58dfe820927"})
@@ -599,7 +597,6 @@ def test_get_inventory_product():
     """
     data = list(filter(lambda x: x[0] == "Hundmat", all_inventories))
     app.db = db_mock(data)
-    client = TestClient(app)
     response = client.get("/inventory",
                           params={
                               "product": "a37c34ae-0895-484a-8b2a-355aea3b6c44"
@@ -616,7 +613,6 @@ def test_get_inventory_store_and_product():
         lambda x: x[0] == "Hundmat" and x[-1] == "Den Stora Djurbutiken",
         all_inventories))
     app.db = db_mock(data)
-    client = TestClient(app)
     response = client.get("/inventory", params={
         "product": "a37c34ae-0895-484a-8b2a-355aea3b6c44",
         "store": "676df1a1-f1d1-4ac5-9ee3-c58dfe820927"
@@ -631,7 +627,6 @@ def test_get_inventory_erroneous_store():
     """This unit test checks for a call to GET /inventory?store=Erroneous-UUID
     """
     app.db = db_mock(None)
-    client = TestClient(app)
     response = client.get("/inventory",
                           params={"store": "this is not a valid UUID!"})
     assert response.status_code == 422
@@ -642,7 +637,6 @@ def test_get_inventory_erroneous_product():
     """This unit test checks for a call to GET /inventory?product=Erroneous-UUID
     """
     app.db = db_mock(None)
-    client = TestClient(app)
     response = client.get("/inventory",
                           params={"product": "this is not a valid UUID!"})
     assert response.status_code == 422
