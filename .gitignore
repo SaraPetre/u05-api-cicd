@@ -1,4 +1,4 @@
-src/htmlcov/
+src/htmlcov/*
 db_data
 pgadmin_data
 shared_data
