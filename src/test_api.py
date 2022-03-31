@@ -651,7 +651,7 @@ def test_get_inventory_store_and_product():
     assert response.json() == list(
         filter(
             lambda x: x["store_name"] == "Den Stora Djurbutiken" and
-                      x["product_name"] == "Hundmat", return_data))
+            x["product_name"] == "Hundmat", return_data))
 
 
 def test_get_inventory_erroneous_store():
