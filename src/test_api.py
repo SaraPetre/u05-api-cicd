@@ -624,8 +624,8 @@ def test_get_inventory_store_and_product():
     assert response.status_code == 200
     assert response.json() == list(
         filter(
-            lambda x: x["store_name"] == "Den Stora Djurbutiken" and
-            x["product_name"] == "Hundmat", return_data))
+            lambda x: x["store_name"] == "Den Stora Djurbutiken"
+            and x["product_name"] == "Hundmat", return_data))
 
 
 def test_get_inventory_erroneous_store():
