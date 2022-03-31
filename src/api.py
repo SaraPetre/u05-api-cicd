@@ -237,3 +237,64 @@ def get_income(store: Optional[List[str]] = Query(None),
                             detail="Invalid datetime format!") from err
     entries = [QueryResultIncome(*r)._asdict() for r in result]
     return {"data": entries}
+
+
+# QueryResultInventory is a named tuple used to ease the parsing of
+# list-of-lists data format returned by cursor.fetchall into dictionaries
+# ready to be returned as JSON.
+QueryResultInventory = namedtuple("QueryResultInventory", ("product_name",
+                                                           "adjusted_quantity",
+                                                           "store_name"))
+
+@app.get("/inventory")
+def get_inventory(store=None, product=None):
+    """GET /inventory
+
+    Returns data in the usual format {"data": ·list-of-dicts}. Each
+    dictionary contains all info about *current* inventory (inventory -
+    sales) showing inventory status per product and store.
+
+    It accepts the following query parameters:
+        - store: UUID to filter results by store
+        - product: UUID to filter results by product
+
+    If any invalid UUID is given (either in store or product), 422 -
+    Unprocessable Entity will be returned
+
+    """
+    store_clause, product_clause = "", ""
+    parameters = []
+    if store:
+        try:
+            uuid.UUID(store)
+        except ValueError as err:
+            raise HTTPException(status_code=422,
+                                detail="Invalid UUID for product!") from err
+        store_clause = "WHERE stores.id = %s"
+        parameters.append(store)
+    if product:
+        try:
+            uuid.UUID(product)
+        except ValueError as err:
+            raise HTTPException(status_code=422,
+                                detail="Invalid UUID for store!") from err
+        product_clause = "WHERE products.id = %s"
+        if not parameters:
+            product_clause = product_clause.replace("WHERE", "END")
+        parameters.append(product)
+    query = """SELECT products.name,
+               SUM(inventory.quantity) + SUM(sold_products.quantity),
+               stores.name
+               FROM inventory
+               JOIN products ON products.id = inventory.product
+               JOIN stores ON stores.id = inventory.store
+               JOIN sold_products ON sold_products.product = products.id
+               {store} {product}
+               GROUP BY stores.name, products.name;
+    """
+    query = query.format(store=store_clause, product=product_clause)
+    with app.db.cursor() as cur:
+        cur.execute(query, parameters)
+        result = cur.fetchall()
+    entries = [QueryResultInventory(*r)._asdict() for r in result]
+    return sorted(entries, key=lambda x: (x["store_name"], x["product_name"]))
