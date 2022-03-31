@@ -448,6 +448,7 @@ def test_get_income_not_valid_datetime():
     assert response.json() == {"detail": "Invalid datetime format!"}
     shutdown()
 
+
 all_inventories = [
     [
         "Hundmat",
@@ -487,42 +488,43 @@ all_inventories = [
 ]
 
 return_data = [
-  {
-    "product_name": "Hundmat",
-    "adjusted_quantity": 27,
-    "store_name": "Den Lilla Djurbutiken"
-  },
-  {
-    "product_name": "Kattmat",
-    "adjusted_quantity": 387,
-    "store_name": "Den Lilla Djurbutiken"
-  },
-  {
-    "product_name": "Hundmat",
-    "adjusted_quantity": 140,
-    "store_name": "Den Stora Djurbutiken"
-  },
-  {
-    "product_name": "Kattklonare",
-    "adjusted_quantity": 68,
-    "store_name": "Den Stora Djurbutiken"
-  },
-  {
-    "product_name": "Kattmat",
-    "adjusted_quantity": 643,
-    "store_name": "Den Stora Djurbutiken"
-  },
-  {
-    "product_name": "Sömnpiller och energidryck för djur",
-    "adjusted_quantity": 61,
-    "store_name": "Den Stora Djurbutiken"
-  },
-  {
-    "product_name": "Elefantkoppel",
-    "adjusted_quantity": 27,
-    "store_name": "Djuristen"
-  }
+    {
+        "product_name": "Hundmat",
+        "adjusted_quantity": 27,
+        "store_name": "Den Lilla Djurbutiken"
+    },
+    {
+        "product_name": "Kattmat",
+        "adjusted_quantity": 387,
+        "store_name": "Den Lilla Djurbutiken"
+    },
+    {
+        "product_name": "Hundmat",
+        "adjusted_quantity": 140,
+        "store_name": "Den Stora Djurbutiken"
+    },
+    {
+        "product_name": "Kattklonare",
+        "adjusted_quantity": 68,
+        "store_name": "Den Stora Djurbutiken"
+    },
+    {
+        "product_name": "Kattmat",
+        "adjusted_quantity": 643,
+        "store_name": "Den Stora Djurbutiken"
+    },
+    {
+        "product_name": "Sömnpiller och energidryck för djur",
+        "adjusted_quantity": 61,
+        "store_name": "Den Stora Djurbutiken"
+    },
+    {
+        "product_name": "Elefantkoppel",
+        "adjusted_quantity": 27,
+        "store_name": "Djuristen"
+    }
 ]
+
 
 def db_mock(data):
     """This function returns a database mocking object, that will be used
@@ -531,6 +533,7 @@ def db_mock(data):
     database = SimpleNamespace()
     database.cursor = CursorMock(data)
     return database
+
 
 class CursorMock:
     """This class mocks a db cursor. It does not build upon unittest.mock but
@@ -589,6 +592,7 @@ def test_get_inventory_store():
     assert response.status_code == 200
     assert response.json() == list(filter(
         lambda x: x["store_name"] == "Den Stora Djurbutiken", return_data))
+
 
 def test_get_inventory_product():
     """This unit test checks a call to GET /inventory?product=UUID
