@@ -280,9 +280,9 @@ def get_inventory(store=None, product=None):
             raise HTTPException(status_code=422,
                                 detail="Invalid UUID for product!") from err
         product_clause = "WHERE products.id = %s"
-        if not parameters:
-            product_clause = product_clause.replace("WHERE", "END")
         parameters.append(product)
+    if not parameters:
+        product_clause = product_clause.replace("WHERE", "END")
     query = """SELECT products.name,
                SUM(inventory.quantity) + SUM(sold_products.quantity),
                stores.name
