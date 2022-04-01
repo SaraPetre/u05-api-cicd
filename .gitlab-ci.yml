@@ -34,7 +34,7 @@ stages:
   before_script:
     - *some-script-before
   script:
-    - pylint --ignore=E501 src/*.py
+    - pylint src/*.py
 
 "Run flake8":
   stage: code_quality
