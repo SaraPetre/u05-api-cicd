@@ -41,7 +41,7 @@ stages:
   before_script:
     - *some-script-before
   script:
-      flake8 --ignore=E501 src/*.py
+      flake8 src/*.py
 
 "Run unit tests":
   stage: tests
