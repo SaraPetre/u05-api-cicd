@@ -548,7 +548,8 @@ def test_get_income_one_store_and_one_product():
     """This unit test checks a call to GET /income?store=UUID&product=UUID
     """
     startup()
-    response = client.get("/income?store=676df1a1-f1d1-4ac5-9ee3-c58dfe820927&product=6c944a17-7606-42f4-a045-df459f6a8c6e")
+    response = client.get("/income?store=676df1a1-f1d1-4ac5-9ee3-c58dfe820927&"
+                          "product=6c944a17-7606-42f4-a045-df459f6a8c6e")
     assert response.status_code == 200
     assert response.json() == {
         "data": [
