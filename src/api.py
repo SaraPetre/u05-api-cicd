@@ -282,7 +282,7 @@ def get_inventory(store=None, product=None):
         product_clause = "WHERE products.id = %s"
         parameters.append(product)
     if not parameters:
-            product_clause = product_clause.replace("WHERE", "END")
+        product_clause = product_clause.replace("WHERE", "END")
     query = """SELECT products.name,
                SUM(inventory.quantity) + SUM(sold_products.quantity),
                stores.name
