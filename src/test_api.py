@@ -392,6 +392,34 @@ def test_get_income_not_valid_product_uuid():
     shutdown()
 
 
+def test_get_income_product_from():
+    '''
+    The test returnes status code 200 and data when query from is used.
+    '''
+    startup()
+    response = client.get("/income?product=02d9562f-05e8-49b2-8ace-6e166c440060&from=2022-01-01")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+                "store_name": "Den Lilla Djurbutiken",
+                "product_name": "Kattmat",
+                "price": 109,
+                "quantity": 57,
+                "sale_time": "2022-02-07T09:00:56",
+                "discount": None
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattmat",
+                "price": 109,
+                "quantity": 10,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": None
+            }
+        ]
+    }
+
 def test_get_income_from():
     '''
     The test returnes status code 200 and data when query from is used.
@@ -477,6 +505,62 @@ def test_get_income_to():
             }
         ]
     }
+
+def test_get_income_from_and_to():
+    """This unit test checks a call to GET /income?from=UUID&to=UUID
+    """
+    startup()
+    response = client.get("/income?from=2022-02-07&to=2022-02-28")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+                "store_name": "Den Lilla Djurbutiken",
+                "product_name": "Kattmat",
+                "price": 109,
+                "quantity": 57,
+                "sale_time": "2022-02-07T09:00:56",
+                "discount": None
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattklonare",
+                "price": 55900,
+                "quantity": 1,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": 25
+            },
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Kattmat",
+                "price": 109,
+                "quantity": 10,
+                "sale_time": "2022-02-27T12:32:46",
+                "discount": None
+            }
+        ]
+    }
+
+
+def test_get_income_one_store_and_one_product():
+    """This unit test checks a call to GET /income?store=UUID&product=UUID
+    """
+    startup()
+    response = client.get("/income?store=676df1a1-f1d1-4ac5-9ee3-c58dfe820927&product=6c944a17-7606-42f4-a045-df459f6a8c6e")
+    assert response.status_code == 200
+    assert response.json() == {
+        "data": [
+            {
+                "store_name": "Den Stora Djurbutiken",
+                "product_name": "Sömnpiller och energidryck för djur",
+                "price": 9.95,
+                "quantity": 12,
+                "sale_time": "2022-01-25T13:52:34",
+                "discount": 9
+            }
+        ]
+    }
+    shutdown()
 
 
 all_inventories = [
