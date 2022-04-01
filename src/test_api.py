@@ -420,6 +420,7 @@ def test_get_income_product_from():
         ]
     }
 
+
 def test_get_income_from():
     '''
     The test returnes status code 200 and data when query from is used.
@@ -505,6 +506,7 @@ def test_get_income_to():
             }
         ]
     }
+
 
 def test_get_income_from_and_to():
     """This unit test checks a call to GET /income?from=UUID&to=UUID

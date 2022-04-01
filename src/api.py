@@ -267,8 +267,6 @@ def get_inventory(store=None, product=None):
     parameters = []
     if store:
         try:
-            # for iterator in store:
-               # uuid.UUID(iterator)
             uuid.UUID(store)
         except ValueError as err:
             raise HTTPException(status_code=422,
